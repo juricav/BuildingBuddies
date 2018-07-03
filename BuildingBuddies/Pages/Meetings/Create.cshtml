@@ -1,0 +1,49 @@
+﻿@page
+@model BuildingBuddies.Pages.Meetings.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h2>Create</h2>
+
+<h4>Meeting</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Meeting.Domain" class="control-label"></label>
+                <input asp-for="Meeting.Domain" class="form-control" />
+                <span asp-validation-for="Meeting.Domain" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Meeting.CompanyName" class="control-label"></label>
+                <input asp-for="Meeting.CompanyName" class="form-control" />
+                <span asp-validation-for="Meeting.CompanyName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Meeting.StartDate" class="control-label"></label>
+                <input asp-for="Meeting.StartDate" class="form-control" />
+                <span asp-validation-for="Meeting.StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Meeting.EndDate" class="control-label"></label>
+                <input asp-for="Meeting.EndDate" class="form-control" />
+                <span asp-validation-for="Meeting.EndDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
