@@ -20,7 +20,7 @@ namespace BuildingBuddies.Data
 
             var meetings = new Meeting[]
             {
-                new Meeting{Link="www.buildingbuddies.com/1", Domain = "erstebank.com", CompanyName ="Erste banka", StartDate=DateTime.Parse("2018-07-01"), EndDate = DateTime.Parse("2018-07-20") },
+                new Meeting{Link="www.buildingbuddies.com/1", Domain = "erstebank.com", CompanyName ="Erste banka", StartDate=DateTime.Parse("2018-07-01"), EndDate = DateTime.Parse("2018-07-06") },
                 new Meeting{Link="www.buildingbuddies.com/2", Domain = "otp.com", CompanyName ="OTP banka", StartDate=DateTime.Parse("2018-08-01"), EndDate = DateTime.Parse("2018-08-20") }
             };
             foreach(Meeting m in meetings)

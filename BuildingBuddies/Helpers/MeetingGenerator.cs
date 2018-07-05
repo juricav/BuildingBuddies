@@ -11,9 +11,15 @@ namespace BuildingBuddies.Helpers
     public class MeetingGenerator : PageModel
     {
         private static Random rng = new Random((int)DateTime.Now.Ticks);
+
         private readonly BuildingBuddiesContext _context;
 
-        public async Task ConnectUsers (int meetingId, BuildingBuddiesContext _context)
+        public MeetingGenerator(BuildingBuddiesContext context)
+        {
+            _context = context;
+        }
+
+        public async Task ConnectUsers (int meetingId)
         {
             List<User> FreeUsers = await _context.User.Where(u => u.MeetingID == meetingId)
                                                         .OrderBy(u => rng.Next())
@@ -56,23 +62,23 @@ namespace BuildingBuddies.Helpers
                 string SecondUsername = (from x in _context.User
                                where x.AgreedMeetingID == u.AgreedMeetingID && x.UserID != u.UserID
                                select x).First().Username;
-                await MailSender.Send("jurica.smail@gmail.com", "Dragi " + u.Username, "Spojeni ste s korisnikom" + SecondUsername);
+                await MailSender.Send("jurica.smail@gmail.com", "Dragi " + u.Username, "Spojeni ste s korisnikom " + SecondUsername);
             }
         }
 
-        public async Task DailyBatch(/*BuildingBuddiesContext _context*/)
+        public async Task DailyBatch()
         {
-            //List<Meeting> Meetings = await _context.Meeting.Where(m => m.EndDate > DateTime.Now)
-            //                                            .ToListAsync();
+            // gledamo istekle sastanke
+            List<Meeting> Meetings = await _context.Meeting.Where(m => m.EndDate < DateTime.Now)
+                                                        .ToListAsync();
 
-            MailSender MailSender = new MailSender();
-            await MailSender.Send("jurica.smail@gmail.com", DateTime.Now.Minute.ToString(), "test");
-
-            // testirati ovo
-            //foreach(Meeting m in Meetings)
-            //{
-            //    await ConnectUsers(m.MeetingID, _context);
-            //}
+            if(Meetings.Count() > 0)
+            {
+                foreach (Meeting m in Meetings)
+                {
+                    await ConnectUsers(m.MeetingID);
+                }
+            }
         }
     }
 }

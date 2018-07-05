@@ -27,19 +27,6 @@ namespace BuildingBuddies.Pages.Users
                 .Include(u => u.AgreedMeeting)
                 .Include(u => u.Department)
                 .Include(u => u.Meeting).ToListAsync();
-
-            //MailSender ms = new MailSender();
-            //await ms.Send("jurica313@gmail.com", "nehangfire test", DateTime.Now.ToShortDateString());
-
-            MeetingGenerator mg = new MeetingGenerator();
-            int b = 1;
-            await mg.ConnectUsers(b, _context);
-
-            //MailSender MailSender = new MailSender();
-            //await MailSender.Send("jurica.smail@gmail.com", "Spojeni ste", "weee");
-            
-
-            //RecurringJob.AddOrUpdate(() => Console.WriteLine(""), Cron.Minutely);
         }
     }
 }

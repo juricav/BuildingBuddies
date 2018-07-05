@@ -15,10 +15,12 @@ namespace BuildingBuddies.Helpers
 
             var SmtpClient = new SmtpClient
             {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                Credentials = new NetworkCredential(Sender, "DebelaZirafa1!")
+                //Host = "smtp.gmail.com",
+                //Port = 587,
+                //EnableSsl = true,
+                //Credentials = new NetworkCredential(Sender, "DebelaZirafa1!")
+                Host = "127.0.0.1",
+                Port = 2500
             };
 
             using (var Message = new MailMessage(Sender, reciever)

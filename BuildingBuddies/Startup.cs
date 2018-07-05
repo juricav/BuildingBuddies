@@ -63,11 +63,7 @@ namespace BuildingBuddies
             app.UseHangfireDashboard();
             app.UseHangfireServer();
 
-            app.UseMvc();
-
-            MeetingGenerator mg = new MeetingGenerator();
-            
-            RecurringJob.AddOrUpdate(() => mg.DailyBatch(), Cron.MinuteInterval(2));
+            app.UseMvc();            
         }
     }
 }
