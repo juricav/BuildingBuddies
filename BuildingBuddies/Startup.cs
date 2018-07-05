@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using BuildingBuddies.Models;
 using Hangfire;
+using BuildingBuddies.Helpers;
 
 namespace BuildingBuddies
 {
@@ -63,6 +64,10 @@ namespace BuildingBuddies
             app.UseHangfireServer();
 
             app.UseMvc();
+
+            MeetingGenerator mg = new MeetingGenerator();
+            
+            RecurringJob.AddOrUpdate(() => mg.DailyBatch(), Cron.MinuteInterval(2));
         }
     }
 }

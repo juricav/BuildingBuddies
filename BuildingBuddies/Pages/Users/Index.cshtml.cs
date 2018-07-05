@@ -12,9 +12,9 @@ namespace BuildingBuddies.Pages.Users
 {
     public class IndexModel : PageModel
     {
-        private readonly BuildingBuddies.Models.BuildingBuddiesContext _context;
+        private readonly BuildingBuddiesContext _context;
 
-        public IndexModel(BuildingBuddies.Models.BuildingBuddiesContext context)
+        public IndexModel(BuildingBuddiesContext context)
         {
             _context = context;
         }
@@ -31,8 +31,15 @@ namespace BuildingBuddies.Pages.Users
             //MailSender ms = new MailSender();
             //await ms.Send("jurica313@gmail.com", "nehangfire test", DateTime.Now.ToShortDateString());
 
-            //BackgroundJob.Enqueue(() => Debug.WriteLine("Background Job completed successfully!"));
-            RecurringJob.AddOrUpdate(() => Console.WriteLine(""), Cron.Minutely);
+            MeetingGenerator mg = new MeetingGenerator();
+            int b = 1;
+            await mg.ConnectUsers(b, _context);
+
+            //MailSender MailSender = new MailSender();
+            //await MailSender.Send("jurica.smail@gmail.com", "Spojeni ste", "weee");
+            
+
+            //RecurringJob.AddOrUpdate(() => Console.WriteLine(""), Cron.Minutely);
         }
     }
 }

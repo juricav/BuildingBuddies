@@ -26,7 +26,7 @@ namespace BuildingBuddies.Helpers
 
         public string GenerateSignup()
         {
-            var BaseUrl = "https://localhost:44315/Meetings";
+            var BaseUrl = "https://localhost:44315/Users/Create";
             var Length = 10;
 
             return GenerateCustom(BaseUrl, Length);

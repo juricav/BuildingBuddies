@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BuildingBuddies.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BuildingBuddies.Pages.Users
 {
@@ -29,12 +30,15 @@ namespace BuildingBuddies.Pages.Users
         [BindProperty]
         public User User { get; set; }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(string meetingLink)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            Meeting SourceMeeting = await _context.Meeting.Where(m => m.Link.Contains(meetingLink)).FirstOrDefaultAsync();
+            User.MeetingID = SourceMeeting.MeetingID;
 
             _context.User.Add(User);
             await _context.SaveChangesAsync();

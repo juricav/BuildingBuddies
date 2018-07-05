@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{meetingLink?}"
 @model BuildingBuddies.Pages.Users.CreateModel
 
 @{
@@ -37,10 +37,10 @@
                 <label asp-for="User.DepartmentID" class="control-label"></label>
                 <select asp-for="User.DepartmentID" class ="form-control" asp-items="ViewBag.DepartmentID"></select>
             </div>
-            <div class="form-group">
+            @*<div class="form-group">
                 <label asp-for="User.MeetingID" class="control-label"></label>
                 <select asp-for="User.MeetingID" class ="form-control" asp-items="ViewBag.MeetingID"></select>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="User.AgreedMeetingID" class="control-label"></label>
                 <select asp-for="User.AgreedMeetingID" class ="form-control" asp-items="ViewBag.AgreedMeetingID"></select>
