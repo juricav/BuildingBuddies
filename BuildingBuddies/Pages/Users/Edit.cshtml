@@ -15,11 +15,6 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="User.UserID" />
             <div class="form-group">
-                <label asp-for="User.Domain" class="control-label"></label>
-                <input asp-for="User.Domain" class="form-control" />
-                <span asp-validation-for="User.Domain" class="text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="User.Email" class="control-label"></label>
                 <input asp-for="User.Email" class="form-control" />
                 <span asp-validation-for="User.Email" class="text-danger"></span>
@@ -57,7 +52,7 @@
 </div>
 
 <div>
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Details" asp-route-id="@Model.User.UserID">Cancel</a>
 </div>
 
 @section Scripts {

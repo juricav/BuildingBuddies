@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,9 +10,14 @@ namespace BuildingBuddies.Models
     {
         public int MeetingID { get; set; }
         public string Link { get; set; }
+        [Display(Name = "Company domain")]
         public string Domain { get; set; }
+        [Display(Name = "Company name")]
         public string CompanyName { get; set; }
-        public DateTime StartDate { get; set; }
+        public bool MeetingEnded { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}", ApplyFormatInEditMode = true)]
+        [Display(Name = "End of registrations")]
         public DateTime EndDate { get; set; }
 
         public ICollection<User> Users { get; set; }

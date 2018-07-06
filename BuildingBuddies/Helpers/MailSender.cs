@@ -11,7 +11,8 @@ namespace BuildingBuddies.Helpers
     {
         public async Task Send(string reciever, string subject, string body)
         {
-            string Sender = "buildingbuddies1@gmail.com";
+            //string Sender = "buildingbuddies1@gmail.com";
+            string Sender = "service@buildingbuddies.com";
 
             var SmtpClient = new SmtpClient
             {

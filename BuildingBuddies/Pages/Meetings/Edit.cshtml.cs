@@ -63,7 +63,7 @@ namespace BuildingBuddies.Pages.Meetings
                 }
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/Details", new { id = Meeting.MeetingID });
         }
 
         private bool MeetingExists(int id)

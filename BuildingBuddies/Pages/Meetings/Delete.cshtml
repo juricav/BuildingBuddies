@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:int?}"
 @model BuildingBuddies.Pages.Meetings.DeleteModel
 
 @{
@@ -29,12 +29,6 @@
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Meeting.CompanyName)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Meeting.StartDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Meeting.StartDate)
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Meeting.EndDate)

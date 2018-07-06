@@ -14,9 +14,6 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.User[0].Domain)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.User[0].Email)
             </th>
             <th>
@@ -41,9 +38,6 @@
         @foreach (var item in Model.User)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Domain)
-                </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Email)
                 </td>

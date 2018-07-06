@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:int?}"
 @model BuildingBuddies.Pages.Users.DetailsModel
 
 @{
@@ -11,12 +11,6 @@
     <h4>User</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.User.Domain)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.User.Domain)
-        </dd>
         <dt>
             @Html.DisplayNameFor(model => model.User.Email)
         </dt>
@@ -56,6 +50,5 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.User.UserID">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Edit" asp-route-id="@Model.User.UserID">Edit</a>
 </div>

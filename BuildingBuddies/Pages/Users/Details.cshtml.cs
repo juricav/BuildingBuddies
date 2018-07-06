@@ -17,8 +17,8 @@ namespace BuildingBuddies.Pages.Users
         {
             _context = context;
         }
-
-        public User User { get; set; }
+        
+        public new User User { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {

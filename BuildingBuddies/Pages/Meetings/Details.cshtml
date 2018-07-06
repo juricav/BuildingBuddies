@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:int?}"
 @model BuildingBuddies.Pages.Meetings.DetailsModel
 
 @{
@@ -30,12 +30,6 @@
             @Html.DisplayFor(model => model.Meeting.CompanyName)
         </dd>
         <dt>
-            @Html.DisplayNameFor(model => model.Meeting.StartDate)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Meeting.StartDate)
-        </dd>
-        <dt>
             @Html.DisplayNameFor(model => model.Meeting.EndDate)
         </dt>
         <dd>
@@ -44,6 +38,5 @@
     </dl>
 </div>
 <div>
-    <a asp-page="./Edit" asp-route-id="@Model.Meeting.MeetingID">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+    <a asp-page="./Edit" asp-route-id="@Model.Meeting.MeetingID">Edit</a>
 </div>

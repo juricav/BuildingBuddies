@@ -33,13 +33,15 @@ namespace BuildingBuddies.Pages.Meetings
             {
                 return Page();
             }
-            
-            Meeting.Link = new LinkGenerator().GenerateSignup();
+
+            Meeting.Link = "https://localhost:44315/Users/Create/"
+                        + LinkGenerator.GenerateRandomString(10);
+            Meeting.MeetingEnded = false;
 
             _context.Meeting.Add(Meeting);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Details", new { id = Meeting.MeetingID });
         }
     }
 }

@@ -7,14 +7,15 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using BuildingBuddies.Models;
 using Microsoft.EntityFrameworkCore;
+using BuildingBuddies.Helpers;
 
 namespace BuildingBuddies.Pages.Users
 {
     public class CreateModel : PageModel
     {
-        private readonly BuildingBuddies.Models.BuildingBuddiesContext _context;
+        private readonly BuildingBuddiesContext _context;
 
-        public CreateModel(BuildingBuddies.Models.BuildingBuddiesContext context)
+        public CreateModel(BuildingBuddiesContext context)
         {
             _context = context;
         }
@@ -28,7 +29,7 @@ namespace BuildingBuddies.Pages.Users
         }
 
         [BindProperty]
-        public User User { get; set; }
+        public new User User { get; set; }
 
         public async Task<IActionResult> OnPostAsync(string meetingLink)
         {
@@ -36,14 +37,22 @@ namespace BuildingBuddies.Pages.Users
             {
                 return Page();
             }
-
+            
             Meeting SourceMeeting = await _context.Meeting.Where(m => m.Link.Contains(meetingLink)).FirstOrDefaultAsync();
+            User ExistingUser = await _context.User.Where(u => u.Email.Equals(User.Email)).FirstOrDefaultAsync();
+            
+            if(SourceMeeting.Domain != User.Email.Split('@')[1] || !(ExistingUser is null))
+            {
+                return Page();
+            }
+
             User.MeetingID = SourceMeeting.MeetingID;
+            User.Username = LinkGenerator.GenerateRandomString(2);
 
             _context.User.Add(User);
             await _context.SaveChangesAsync();
-
-            return RedirectToPage("./Index");
+            
+            return RedirectToPage("./Details", new { id = User.UserID });
         }
     }
 }

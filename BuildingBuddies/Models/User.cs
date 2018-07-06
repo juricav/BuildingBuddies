@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace BuildingBuddies.Models
@@ -8,7 +9,6 @@ namespace BuildingBuddies.Models
     public class User
     {
         public int UserID { get; set; }
-        public string Domain { get; set; }
         public string Email { get; set; }
         // generator random usernameova
         public string Username { get; set; }

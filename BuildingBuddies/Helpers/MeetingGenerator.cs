@@ -68,8 +68,8 @@ namespace BuildingBuddies.Helpers
 
         public async Task DailyBatch()
         {
-            // gledamo istekle sastanke
-            List<Meeting> Meetings = await _context.Meeting.Where(m => m.EndDate < DateTime.Now)
+            // gledamo sastanke kojima je prošao dan kraja i nisu već obrađeni
+            List<Meeting> Meetings = await _context.Meeting.Where(m => m.EndDate < DateTime.Now && m.MeetingEnded != true)
                                                         .ToListAsync();
 
             if(Meetings.Count() > 0)
@@ -77,7 +77,11 @@ namespace BuildingBuddies.Helpers
                 foreach (Meeting m in Meetings)
                 {
                     await ConnectUsers(m.MeetingID);
+
+                    m.MeetingEnded = true;
+                    _context.Meeting.Update(m);
                 }
+                _context.SaveChanges();
             }
         }
     }

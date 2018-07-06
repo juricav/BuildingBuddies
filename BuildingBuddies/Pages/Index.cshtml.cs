@@ -21,12 +21,8 @@ namespace BuildingBuddies.Pages
 
         public void OnGet()
         {
-            //MeetingGenerator mg = new MeetingGenerator(_context);
-            //RecurringJob.AddOrUpdate("uniqueId", () => mg.DailyBatch(), Cron.Daily);
-
-            MailSender ms = new MailSender();
-
-            await ms.Send("jurica.smail@gmail.com", "test1", "testb");
+            MeetingGenerator MeetingGenerator = new MeetingGenerator(_context);
+            RecurringJob.AddOrUpdate("uniqueId", () => MeetingGenerator.DailyBatch(), Cron.Daily);
         }
     }
 }
