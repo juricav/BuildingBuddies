@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mail;
-using System.Threading.Tasks;
-
-namespace BuildingBuddies.Models
+﻿namespace BuildingBuddies.Models
 {
     public class User
     {
@@ -22,5 +16,6 @@ namespace BuildingBuddies.Models
         public Department Department { get; set; }
         public Meeting Meeting { get; set; }
         public AgreedMeeting AgreedMeeting { get; set; }
+        //public ICollection<Chat> Chats { get; set; }
     }
 }

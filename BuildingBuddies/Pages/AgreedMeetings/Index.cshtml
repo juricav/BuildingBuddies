@@ -1,4 +1,4 @@
-﻿@page
+﻿@page "{id:int?}"
 @model BuildingBuddies.Pages.AgreedMeetings.IndexModel
 
 @{
@@ -14,23 +14,24 @@
     <thead>
         <tr>
             <th>
+                Meeting ID
                 @Html.DisplayNameFor(model => model.AgreedMeeting[0].Meeting)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.AgreedMeeting) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Meeting.MeetingID)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.AgreedMeetingID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.AgreedMeetingID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.AgreedMeetingID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.AgreedMeeting)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Meeting.MeetingID)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.AgreedMeetingID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.AgreedMeetingID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.AgreedMeetingID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

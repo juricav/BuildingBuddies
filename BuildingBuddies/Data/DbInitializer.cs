@@ -80,9 +80,7 @@ namespace BuildingBuddies.Data
             {
                 context.User.Add(u);
             }
-            context.SaveChanges();
-
-            
+            context.SaveChanges();            
         }
     }
 }
