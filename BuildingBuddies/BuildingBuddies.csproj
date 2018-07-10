@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\Chat.cs" />
     <Compile Remove="Models\Location.cs" />
   </ItemGroup>
 
