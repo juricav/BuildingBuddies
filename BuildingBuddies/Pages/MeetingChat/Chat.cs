@@ -15,13 +15,13 @@ namespace BuildingBuddies.Pages.MeetingChat
         }
 
         [BindProperty]
-        public ChatItem Item { get; set; }
+        public ChatMessage Item { get; set; }
 
         public void OnGet()
         {
             if (Item == null)
             {
-                Item = new ChatItem();
+                Item = new ChatMessage();
             }
 
             Item.Time = DateTime.Now;
@@ -34,9 +34,9 @@ namespace BuildingBuddies.Pages.MeetingChat
                 return Page();
             }
 
-            Item.Id = 0; // id sastanka
+            Item.ChatItemID = 0; // id sastanka
             // id korisnika
-            _context.ChatItem.Add(Item);
+            _context.ChatMessage.Add(Item);
             _context.SaveChanges();
 
             return RedirectToPage("Chat");

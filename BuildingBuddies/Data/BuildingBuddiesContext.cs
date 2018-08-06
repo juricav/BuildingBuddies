@@ -13,6 +13,6 @@ namespace BuildingBuddies.Models
         public DbSet<Department> Department { get; set; }
         public DbSet<Meeting> Meeting { get; set; }
         public DbSet<AgreedMeeting> AgreedMeeting { get; set; }
-        public DbSet<ChatItem> ChatItem { get; set; }
+        public DbSet<ChatMessage> ChatMessage { get; set; }
     }
 }

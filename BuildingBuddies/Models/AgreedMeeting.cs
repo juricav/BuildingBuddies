@@ -10,6 +10,6 @@ namespace BuildingBuddies.Models
 
         public Meeting Meeting { get; set; }
         public ICollection<User> Users { get; set; }
-        //public ICollection<Chat> Chats { get; set; }
+        public ICollection<ChatMessage> ChatMessages { get; set; }
     }
 }
