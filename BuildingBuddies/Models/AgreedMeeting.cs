@@ -5,6 +5,7 @@ namespace BuildingBuddies.Models
     public class AgreedMeeting
     {
         public int AgreedMeetingID { get; set; }
+        public string Link { get; set; }
 
         public int MeetingID { get; set; }
 

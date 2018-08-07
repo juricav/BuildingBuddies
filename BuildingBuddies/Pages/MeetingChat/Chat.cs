@@ -1,7 +1,10 @@
 ﻿using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BuildingBuddies.Pages.MeetingChat
 {
@@ -17,29 +20,34 @@ namespace BuildingBuddies.Pages.MeetingChat
         [BindProperty]
         public ChatMessage Item { get; set; }
 
-        public void OnGet()
+        public void OnGet(string meetingLink)
         {
             if (Item == null)
             {
                 Item = new ChatMessage();
             }
 
+            // dohvat poruka vezanih za taj meeting
+
             Item.Time = DateTime.Now;
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPost(string meetingLink)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+            
+            AgreedMeeting SourceMeeting = await _context.AgreedMeeting.Where(am => am.Link == meetingLink).FirstOrDefaultAsync();
 
-            Item.ChatItemID = 0; // id sastanka
-            // id korisnika
+            Item.AgreedMeetingID = SourceMeeting.AgreedMeetingID;
+            //Item.UserID = 1;
+
             _context.ChatMessage.Add(Item);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return RedirectToPage("Chat");
+            return RedirectToPage("Chat", new { meetingLink });
         }
     }
 }

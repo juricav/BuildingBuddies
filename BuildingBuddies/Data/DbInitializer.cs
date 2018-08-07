@@ -1,6 +1,7 @@
 ﻿using BuildingBuddies.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
@@ -47,8 +48,8 @@ namespace BuildingBuddies.Data
 
             var agreedMeetings = new AgreedMeeting[]
             {
-                new AgreedMeeting{MeetingID=meetings.Single(m => m.Domain == "erstebank.com").MeetingID},
-                new AgreedMeeting{MeetingID=meetings.Single(m => m.Domain == "otp.com").MeetingID}
+                new AgreedMeeting{MeetingID=meetings.Single(m => m.Domain == "erstebank.com").MeetingID, Link = "VfPjttgdLn"},
+                new AgreedMeeting{MeetingID=meetings.Single(m => m.Domain == "otp.com").MeetingID, Link = "rub29DFWRr"}
             };
             foreach(AgreedMeeting am in agreedMeetings)
             {
@@ -80,7 +81,24 @@ namespace BuildingBuddies.Data
             {
                 context.User.Add(u);
             }
-            context.SaveChanges();            
-        }
+            context.SaveChanges();
+
+            var chatMessages = new ChatMessage[]
+            {
+                new ChatMessage{Time= DateTime.ParseExact("2018-08-07 19:26", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), Name= users.Single(u => u.Username == "ananas").Username, Message="khet dsadas", UserID = users.Single(u => u.Username == "ananas").UserID, AgreedMeetingID= agreedMeetings.Single(am => am.MeetingID == meetings.Single(m => m.Domain == "erstebank.com").MeetingID).AgreedMeetingID},
+                new ChatMessage{Time= DateTime.ParseExact("2018-08-07 19:28", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), Name= users.Single(u => u.Username == "banana").Username, Message="ou89oi8 dsadafgad", UserID = users.Single(u => u.Username == "banana").UserID, AgreedMeetingID= agreedMeetings.Single(am => am.MeetingID == meetings.Single(m => m.Domain == "erstebank.com").MeetingID).AgreedMeetingID},
+                new ChatMessage{Time= DateTime.ParseExact("2018-08-07 20:11", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), Name= users.Single(u => u.Username == "ananas").Username, Message="ggrwfgws", UserID = users.Single(u => u.Username == "ananas").UserID, AgreedMeetingID= agreedMeetings.Single(am => am.MeetingID == meetings.Single(m => m.Domain == "erstebank.com").MeetingID).AgreedMeetingID},
+                new ChatMessage{Time= DateTime.ParseExact("2018-08-07 20:56", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), Name= users.Single(u => u.Username == "banana").Username, Message="h7uie", UserID = users.Single(u => u.Username == "banana").UserID, AgreedMeetingID= agreedMeetings.Single(am => am.MeetingID == meetings.Single(m => m.Domain == "erstebank.com").MeetingID).AgreedMeetingID},
+                new ChatMessage{Time= DateTime.ParseExact("2018-08-07 23:45", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), Name= users.Single(u => u.Username == "nosorog").Username, Message="bh6uteh5ok", UserID = users.Single(u => u.Username == "nosorog").UserID, AgreedMeetingID= agreedMeetings.Single(am => am.MeetingID == meetings.Single(m => m.Domain == "otp.com").MeetingID).AgreedMeetingID},
+                new ChatMessage{Time= DateTime.ParseExact("2018-08-08 07:26", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), Name= users.Single(u => u.Username == "hijena").Username, Message="zh5eu65", UserID = users.Single(u => u.Username == "hijena").UserID, AgreedMeetingID= agreedMeetings.Single(am => am.MeetingID == meetings.Single(m => m.Domain == "otp.com").MeetingID).AgreedMeetingID},
+                new ChatMessage{Time= DateTime.ParseExact("2018-08-08 14:07", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), Name= users.Single(u => u.Username == "nosorog").Username, Message="buz5zr54ok", UserID = users.Single(u => u.Username == "nosorog").UserID, AgreedMeetingID= agreedMeetings.Single(am => am.MeetingID == meetings.Single(m => m.Domain == "otp.com").MeetingID).AgreedMeetingID},
+                new ChatMessage{Time= DateTime.ParseExact("2018-08-09 08:33", "yyyy-MM-dd HH:mm", CultureInfo.InvariantCulture), Name= users.Single(u => u.Username == "hijena").Username, Message="u5u6ijičćpo", UserID = users.Single(u => u.Username == "hijena").UserID, AgreedMeetingID= agreedMeetings.Single(am => am.MeetingID == meetings.Single(m => m.Domain == "otp.com").MeetingID).AgreedMeetingID}
+            };
+            foreach(ChatMessage cm in chatMessages)
+            {
+                context.ChatMessage.Add(cm);
+            }
+            context.SaveChanges();
+    }
     }
 }

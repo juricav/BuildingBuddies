@@ -1,11 +1,12 @@
-﻿@page
+﻿@page "{meetingLink?}"
 @inject BuildingBuddies.Models.BuildingBuddiesContext dataContext
 @model BuildingBuddies.Pages.MeetingChat.Chat
 
 @{
     ViewData["Title"] = "Home Page";
-
+    
     var shouts = dataContext.ChatMessage
+        .Where(s => s.AgreedMeeting.Link.Equals(ViewContext.RouteData.Values["meetingLink"]))
         .OrderBy(s => s.Time)
         .ToList();
 }
