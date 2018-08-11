@@ -57,6 +57,8 @@ namespace BuildingBuddies
             app.UseHangfireDashboard();
             app.UseHangfireServer();
 
+            app.UseAuthentication();
+
             app.UseMvc();
         }
     }
