@@ -1,9 +1,5 @@
-﻿using System;
-using BuildingBuddies.Areas.Identity.Data;
-using BuildingBuddies.Models;
+﻿using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,12 +12,12 @@ namespace BuildingBuddies.Areas.Identity
         public void Configure(IWebHostBuilder builder)
         {
             builder.ConfigureServices((context, services) => {
-                services.AddDbContext<BuildingBuddiesIdentityContext>(options =>
+                services.AddDbContext<BuildingBuddiesContext>(options =>
                     options.UseSqlServer(
-                        context.Configuration.GetConnectionString("BuildingBuddiesIdentityContextConnection")));
+                        context.Configuration.GetConnectionString("BuildingBuddiesContext")));
 
-                services.AddDefaultIdentity<BuildingBuddiesUser>()
-                    .AddEntityFrameworkStores<BuildingBuddiesIdentityContext>();
+                services.AddDefaultIdentity<User>()
+                    .AddEntityFrameworkStores<BuildingBuddiesContext>();
             });
         }
     }

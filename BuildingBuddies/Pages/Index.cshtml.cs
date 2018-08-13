@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BuildingBuddies.Helpers;
+﻿using BuildingBuddies.Helpers;
 using BuildingBuddies.Models;
 using Hangfire;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace BuildingBuddies.Pages
 {
+    [AllowAnonymous]
     public class IndexModel : PageModel
     {
         private readonly BuildingBuddiesContext _context;

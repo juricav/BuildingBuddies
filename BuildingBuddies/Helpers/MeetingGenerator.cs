@@ -48,11 +48,11 @@ namespace BuildingBuddies.Helpers
                 AgreedMeeting NewAgreedMeeting = _context.AgreedMeeting.Where(am => am.MeetingID == meetingId).LastOrDefault();
                 
                 User FirstUser = (from x in _context.User
-                           where x.UserID == FreeUsers[i].UserID
+                           where x.Id == FreeUsers[i].Id
                            select x).First();
                 User SecondUser = (from x in _context.User
-                                  where x.UserID == FreeUsers[i+1].UserID
-                                  select x).First();
+                                  where x.Id == FreeUsers[i+1].Id
+                                   select x).First();
 
                 FirstUser.AgreedMeetingID = NewAgreedMeeting.AgreedMeetingID;
                 SecondUser.AgreedMeetingID = NewAgreedMeeting.AgreedMeetingID;
@@ -65,13 +65,13 @@ namespace BuildingBuddies.Helpers
             foreach (User u in FreeUsers)
             {
                 string SecondUsername = (from x in _context.User
-                               where x.AgreedMeetingID == u.AgreedMeetingID && x.UserID != u.UserID
-                               select x).First().Username;
+                               where x.AgreedMeetingID == u.AgreedMeetingID && x.Id != u.Id
+                                         select x).First().UserName;
                 string meetingLink = (from x in _context.AgreedMeeting
                                       where x.AgreedMeetingID == u.AgreedMeetingID
                                       select x).First().Link;
 
-                await MailSender.Send(u.Email, "Dragi " + u.Username, "Spojeni ste s korisnikom " + SecondUsername + ". Link: https://localhost:44315/MeetingChat/Chat/" + meetingLink);
+                await MailSender.Send(u.Email, "Dragi " + u.UserName, "Spojeni ste s korisnikom " + SecondUsername + ". Link: https://localhost:44315/MeetingChat/Chat/" + meetingLink);
             }
         }
 

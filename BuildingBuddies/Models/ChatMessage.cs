@@ -9,7 +9,7 @@ namespace BuildingBuddies.Models
         public string Name { get; set; }        
         public string Message { get; set; }
 
-        public int? UserID { get; set; }
+        public string UserId { get; set; }
         public int? AgreedMeetingID { get; set; }
 
         public User User { get; set; }
