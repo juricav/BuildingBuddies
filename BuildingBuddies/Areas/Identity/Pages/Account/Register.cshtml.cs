@@ -1,4 +1,5 @@
-﻿using BuildingBuddies.Models;
+﻿using BuildingBuddies.Helpers;
+using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -65,7 +66,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
             returnUrl = returnUrl ?? Url.Content("~/");
             if (ModelState.IsValid)
             {
-                var user = new User { UserName = Input.Email, Email = Input.Email };
+                var user = new User { UserName = LinkGenerator.GenerateRandomString(10), Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 if (result.Succeeded)
                 {

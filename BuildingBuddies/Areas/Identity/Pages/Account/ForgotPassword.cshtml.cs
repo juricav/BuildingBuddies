@@ -1,4 +1,5 @@
-﻿using BuildingBuddies.Models;
+﻿using BuildingBuddies.Helpers;
+using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -15,6 +16,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
     {
         private readonly UserManager<User> _userManager;
         private readonly IEmailSender _emailSender;
+        private MailSender MailSender = new MailSender();
 
         public ForgotPasswordModel(UserManager<User> userManager, IEmailSender emailSender)
         {
@@ -51,6 +53,10 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { code },
                     protocol: Request.Scheme);
+
+                await MailSender.Send(Input.Email, "Reset Password", $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                await MailSender.Send(Input.Email, "Reset Password", "tertetger");
 
                 await _emailSender.SendEmailAsync(
                     Input.Email,

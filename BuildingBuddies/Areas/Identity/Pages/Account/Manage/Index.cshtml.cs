@@ -1,4 +1,5 @@
-﻿using BuildingBuddies.Models;
+﻿using BuildingBuddies.Helpers;
+using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -125,7 +126,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-
+            MailSender MailSender = new MailSender();
             var userId = await _userManager.GetUserIdAsync(user);
             var email = await _userManager.GetEmailAsync(user);
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -134,6 +135,9 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account.Manage
                 pageHandler: null,
                 values: new { userId = userId, code = code },
                 protocol: Request.Scheme);
+
+            await MailSender.Send(email, "Confirm your email", $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>." + callbackUrl);
+
             await _emailSender.SendEmailAsync(
                 email,
                 "Confirm your email",
