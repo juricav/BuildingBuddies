@@ -34,7 +34,7 @@ namespace BuildingBuddies.Pages.Meetings
                 return Page();
             }
 
-            Meeting.Link = "https://localhost:44315/Users/Create/"
+            Meeting.Link = "https://localhost:44315/Identity/Account/Register/"
                         + LinkGenerator.GenerateRandomString(10);
             Meeting.MeetingEnded = false;
 
