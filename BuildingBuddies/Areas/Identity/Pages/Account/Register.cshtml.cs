@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.ComponentModel.DataAnnotations;
@@ -22,6 +23,8 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;   
         private readonly BuildingBuddiesContext _context;
+        public SelectList DepartmentNameSL { get; set; }
+        public Department Department { get; set; }
 
         public RegisterModel(
             UserManager<User> userManager,
@@ -59,10 +62,31 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+            
+            [Display(Name = "Department")]
+            public Department Department { get; set; }
+
+            public int DepartmentID { get; set; }
+
         }
 
-        public void OnGet(string returnUrl = null)
+        public void PopulateDepartmentsDropDownList(BuildingBuddiesContext _context, string meetingLink, object selectedDepartment = null)
         {
+            var meetingID = from m in _context.Meeting
+                            where m.Link.Contains(meetingLink)
+                            select m.MeetingID;
+
+            var departmentsQuery = from d in _context.Department
+                                   where d.MeetingID == meetingID.First()
+                                   orderby d.Name
+                                   select d;
+
+            DepartmentNameSL = new SelectList(departmentsQuery.AsNoTracking(), "DepartmentID", "Name", selectedDepartment);
+        }
+
+        public void OnGet(string meetingLink, string returnUrl = null)
+        {            
+            PopulateDepartmentsDropDownList(_context, meetingLink);
             ReturnUrl = returnUrl;
         }
 
@@ -74,7 +98,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid && SourceMeeting != null)
             {
-                var user = new User { UserName = LinkGenerator.GenerateRandomString(10), Email = Input.Email };                  
+                var user = new User { UserName = LinkGenerator.GenerateRandomString(10), Email = Input.Email, DepartmentID = Input.DepartmentID, MeetingID = SourceMeeting.MeetingID };                  
 
                 if (SourceMeeting.Domain == user.Email.Split('@')[1]) {
                     var result = await _userManager.CreateAsync(user, Input.Password);
@@ -109,6 +133,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
             }
 
             // If we got this far, something failed, redisplay form
+            PopulateDepartmentsDropDownList(_context, meetingLink);
             return Page();
         }
     }

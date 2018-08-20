@@ -51,7 +51,7 @@ namespace BuildingBuddies.Helpers
                            where x.Id == FreeUsers[i].Id
                            select x).First();
                 User SecondUser = (from x in _context.User
-                                  where x.Id == FreeUsers[i+1].Id
+                                  where x.Id == FreeUsers[i+1].Id && x.DepartmentID != FirstUser.DepartmentID
                                    select x).First();
 
                 FirstUser.AgreedMeetingID = NewAgreedMeeting.AgreedMeetingID;
@@ -71,7 +71,9 @@ namespace BuildingBuddies.Helpers
                                       where x.AgreedMeetingID == u.AgreedMeetingID
                                       select x).First().Link;
 
-                await MailSender.Send(u.Email, "Dragi " + u.UserName, "Spojeni ste s korisnikom " + SecondUsername + ". Link: https://localhost:44315/MeetingChat/Chat/" + meetingLink);
+                //await MailSender.Send(u.Email, $"Dragi {u.UserName}", $"Spojeni ste s korisnikom <a href='https://localhost:44315/MeetingChat/Chat/{meetingLink}'>{SecondUsername}</a>");
+
+                await MailSender.Send(u.Email, $"Dragi {u.UserName}", $"Spojeni ste s korisnikom {SecondUsername}, link: https://localhost:44315/MeetingChat/Chat/{meetingLink}");
             }
         }
 
