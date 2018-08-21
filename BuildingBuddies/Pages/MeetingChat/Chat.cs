@@ -1,9 +1,11 @@
 ﻿using BuildingBuddies.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,24 +15,44 @@ namespace BuildingBuddies.Pages.MeetingChat
     public class Chat : PageModel
     {
         private readonly BuildingBuddiesContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly IHttpContextAccessor _iHttpContext;
 
-        public Chat(BuildingBuddiesContext context, UserManager<User> userManager)
+
+        public Chat(BuildingBuddiesContext context, UserManager<User> userManager, IHttpContextAccessor iHttpContext)
         {
             _context = context;
+            _userManager = userManager;
+            _iHttpContext = iHttpContext;
         }
 
         [BindProperty]
         public ChatMessage Item { get; set; }
+        public List<ChatMessage> Messages { get; set; }
 
-        public void OnGet(string meetingLink)
+        public async Task<IActionResult> OnGetAsync(string meetingLink)
         {
-            if (Item == null)
-            {
-                Item = new ChatMessage();
-            }
+            var userName = _iHttpContext.HttpContext.User.Identity.Name;
 
-            // dohvat poruka vezanih za taj meeting
-            Item.Time = DateTime.Now;
+            var AgreedMeeting = await _context.AgreedMeeting.Where(am => am.Link.Contains(meetingLink)).FirstOrDefaultAsync();
+            var CorrectUser = await _context.User.Where(u => u.NormalizedUserName == userName.ToUpper() && u.AgreedMeetingID == AgreedMeeting.AgreedMeetingID).FirstOrDefaultAsync();
+            
+            if(CorrectUser != null)
+            {
+                if (Item == null)
+                {
+                    Item = new ChatMessage();
+                }
+
+                // dohvat poruka vezanih za taj meeting
+                Item.Time = DateTime.Now;
+
+                return Page();
+            }
+            else
+            {
+                return Unauthorized();
+            }            
         }
 
         public async Task<IActionResult> OnPost(string meetingLink)

@@ -40,9 +40,8 @@ namespace BuildingBuddies
                 config.Filters.Add(new AuthorizeFilter(policy));
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-
             services.AddDbContext<BuildingBuddiesContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));                        
+                    options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));                                    
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

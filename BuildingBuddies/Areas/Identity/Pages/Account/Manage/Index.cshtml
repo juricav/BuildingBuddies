@@ -16,7 +16,8 @@
             </div>
             <div class="form-group">
                 <label asp-for="Input.Email"></label>
-                @if (Model.IsEmailConfirmed)
+                <input asp-for="Input.Email" class="form-control" disabled/>
+                @*@if (Model.IsEmailConfirmed)
                 {
                     <div class="input-group">
                         <input asp-for="Input.Email" class="form-control" />
@@ -28,9 +29,9 @@
                     <input asp-for="Input.Email" class="form-control" />
                     <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
                 }
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>*@
             </div>
-            <button type="submit" class="btn btn-default">Save</button>
+            @*<button type="submit" class="btn btn-default">Save</button>*@
         </form>
     </div>
 </div>

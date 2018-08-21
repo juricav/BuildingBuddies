@@ -51,7 +51,7 @@ namespace BuildingBuddies.Helpers
                            where x.Id == FreeUsers[i].Id
                            select x).First();
                 User SecondUser = (from x in _context.User
-                                  where x.Id == FreeUsers[i+1].Id && x.DepartmentID != FirstUser.DepartmentID
+                                  where x.Id == FreeUsers[i+1].Id && x.DepartmentID != FirstUser.DepartmentID && x.MeetingID == FirstUser.MeetingID
                                    select x).First();
 
                 FirstUser.AgreedMeetingID = NewAgreedMeeting.AgreedMeetingID;

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,11 +18,13 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly BuildingBuddiesContext _context;
 
-        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<User> signInManager, ILogger<LoginModel> logger, BuildingBuddiesContext context)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -69,11 +72,13 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
         {
             returnUrl = returnUrl ?? Url.Content("~/");
 
-            if (ModelState.IsValid)
-            {
+            var user = await _context.User.Where(u => u.NormalizedEmail == Input.Email.ToUpper()).FirstOrDefaultAsync();
+
+            if (ModelState.IsValid && user != null)
+            {                
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+                var result = await _signInManager.PasswordSignInAsync(user.NormalizedUserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");

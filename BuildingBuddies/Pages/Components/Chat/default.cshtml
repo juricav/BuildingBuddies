@@ -1,0 +1,37 @@
+﻿@model List<BuildingBuddies.Models.ChatMessage>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<script type="text/javascript">
+    function getMessages() {
+        $.ajax({
+            url: '/MeetingChat/Chat/ygKqRDqkLb',
+            async: true,
+            success: function (data) {
+                $("#messageList").html(data);
+            },
+            error: function () { alert('error'); }
+        });
+    };
+
+    $(document).ready(function () {
+        setInterval(getMessages, 3000);
+    });
+    
+
+</script>
+
+<div class="row" id="messageList">
+        <div class="col-md-10">
+            @if (Model.Any())
+            {
+                foreach (var message in Model)
+                {
+                    <p>
+                        <strong>@message.Name</strong> | @message.Time.ToString() <br />
+                        @Html.Raw(message.Message.Replace("\r\n", "<br />"))
+                    </p>
+                }
+            }
+        </div>
+    </div>

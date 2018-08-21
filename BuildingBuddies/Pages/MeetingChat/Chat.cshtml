@@ -2,20 +2,20 @@
 @inject BuildingBuddies.Models.BuildingBuddiesContext dataContext
 @model BuildingBuddies.Pages.MeetingChat.Chat
 
-@{
+@*@{
     ViewData["Title"] = "Home Page";
     
     var shouts = dataContext.ChatMessage
         .Where(s => s.AgreedMeeting.Link.Equals(ViewContext.RouteData.Values["meetingLink"]))
         .OrderBy(s => s.Time)
         .ToList();
-}
-
-<meta http-equiv="refresh" content="5">
+}*@
 
 <h2>@ViewData["Title"]</h2>
 
-<div class="row">
+@await  Component.InvokeAsync("Chat", ViewContext.RouteData.Values["meetingLink"])
+
+@*<div class="row">
     <div class="col-md-10">
         @if (shouts.Any())
         {
@@ -28,7 +28,7 @@
             }
         }
     </div>
-</div>
+</div>*@
 
 <div class="row">
     <div class="col-md-10">
