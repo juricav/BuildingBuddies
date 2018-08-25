@@ -35,7 +35,7 @@ namespace BuildingBuddies
                     logger.LogError(ex, "An error occured creating the DB.");
                 }
             }
-
+            
             host.Run();
         }
 

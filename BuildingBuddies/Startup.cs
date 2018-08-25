@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using SignalRChat.Hubs;
+using System;
 
 namespace BuildingBuddies
 {
@@ -41,11 +43,13 @@ namespace BuildingBuddies
             }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddDbContext<BuildingBuddiesContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));                                    
+                    options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));
+            
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -61,11 +65,16 @@ namespace BuildingBuddies
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chatHub");
+            });
+
             app.UseHangfireDashboard();
             app.UseHangfireServer();
 
             app.UseAuthentication();
-
+            
             app.UseMvc();
         }
     }
