@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SignalRChat.Hubs;
 using System;
+using Microsoft.AspNetCore.Owin;
 
 namespace BuildingBuddies
 {
@@ -69,7 +70,7 @@ namespace BuildingBuddies
             {
                 routes.MapHub<ChatHub>("/chatHub");
             });
-
+            
             app.UseHangfireDashboard();
             app.UseHangfireServer();
 
