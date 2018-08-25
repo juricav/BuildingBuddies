@@ -5,7 +5,7 @@
 <script type="text/javascript">
     function getMessages() {
         $.ajax({
-            url: '/MeetingChat/Chat/ygKqRDqkLb',
+            url: '/MeetingChat/Chat/aprtvBqRZq',
             async: true,
             success: function (data) {
                 $("#messageList").html(data);
@@ -15,7 +15,7 @@
     };
 
     $(document).ready(function () {
-        setInterval(getMessages, 3000);
+        setInterval(getMessages, 10000);
     });
     
 
