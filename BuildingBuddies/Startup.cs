@@ -46,7 +46,10 @@ namespace BuildingBuddies
             services.AddDbContext<BuildingBuddiesContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));
             
-            services.AddSignalR();
+            services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,7 +71,7 @@ namespace BuildingBuddies
 
             app.UseSignalR(routes =>
             {
-                routes.MapHub<ChatHub>("/chatHub");
+                routes.MapHub<ChatHub>("/chat");                
             });
             
             app.UseHangfireDashboard();
