@@ -1,25 +1,98 @@
-﻿using BuildingBuddies.Models;
+﻿using BuildingBuddies.Helpers;
+using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace SignalRChat.Hubs
 {
     public class ChatHub : Hub
     {
-        public void Send(string name, string message)
+        private BuildingBuddiesContext _context;
+        private readonly IHttpContextAccessor _iHttpContext;
+
+        public ChatHub(BuildingBuddiesContext context, IHttpContextAccessor iHttpContext)
         {
-            Clients.All.SendAsync("broadcastMessage", name, message);
+            _context = context;
+            _iHttpContext = iHttpContext;           
         }
+
+        public void CreateNewMessage(ChatMessage message)
+        {
+            _context.ChatMessage.Add(message);
+            _context.SaveChangesAsync();
+        }
+
+        public IEnumerable<ChatMessage> GetAllChatMessages(int agreedMeetingId)
+        {
+            return _context.ChatMessage.Where(m => m.AgreedMeetingID == agreedMeetingId);
+        }
+
+        public Task Send(string message)
+        {
+            // nalazimo pošiljatelja, njegov agreedMeeting i šaljemo u grupu
+            //var UserName = _iHttpContext.HttpContext.User.Identity.Name;
+            var UserName = "piroska";
+            var User = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).SingleOrDefault();
+            var AgreedMeeting = _context.AgreedMeeting.Where(am => am.AgreedMeetingID == User.AgreedMeetingID).SingleOrDefault();
+
+            var ConnectionId = Context.ConnectionId;
+
+            if (User == null)
+            {
+                throw new System.Exception("user doesn't exist");
+            }
+
+            var ChatMessage = new ChatMessage
+            {
+                Time = DateTime.Now,
+                Name = User.UserName,
+                Message = message,
+                AgreedMeetingID = AgreedMeeting.AgreedMeetingID,
+                ConnectionId = ConnectionId
+            };
+
+            CreateNewMessage(ChatMessage);
+            return Clients.All.SendAsync("Send", message);
+            //return Clients.Group(ConnectionId).SendAsync("Send", ChatMessage.Name, ChatMessage);
+            //Clients.All.SendAsync("broadcastMessage", name, message);
+        }
+
+        //public async Task JoinGroup()
+        //{
+        //    var UserName = _iHttpContext.HttpContext.User.Identity.Name;
+        //    var User = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).SingleOrDefault();
+        //    var AgreedMeeting = _context.AgreedMeeting.Where(am => am.GetUsers().Contains(User)).SingleOrDefault();
+
+        //    var ConnectionId = Context.ConnectionId;
+
+        //    if (User == null)
+        //    {
+        //        throw new System.Exception("user doesn't exist");
+        //    }
+
+        //    var history = await _context.ChatMessage.Where(m => m.AgreedMeeting.AgreedMeetingID == AgreedMeeting.AgreedMeetingID).Select(cm => 
+        //    new ChatMessage
+        //    {
+        //        Time = cm.Time,
+        //        Name = cm.Name,
+        //        Message = cm.Message,
+        //        AgreedMeetingID = cm.AgreedMeetingID,
+        //        ConnectionId = cm.ConnectionId
+        //    }).ToListAsync();
+        //}
 
         public void Send_PrivateMessage(string msgFrom, string msg, string touserid)
         {
             var id = Context.ConnectionId;
             // šaljemo korisniku koji šalje da ima svoju kopiju
-            Clients.Client(id).SendAsync("broadcastMessage", msgFrom, msg);
+            Clients.Client(id).SendAsync("BroadcastMessage", msgFrom, msg);
             // šaljemo korisniku kojem šalje da i on vidi
-            Clients.Client(touserid).SendAsync("broadcastMessage", msgFrom, msg);
+            Clients.Client(touserid).SendAsync("BroadcastMessage", msgFrom, msg);
 
             //cli.Caller.receiveMessage(msgFrom, msg, touserid);
             //cli.Client(touserid).receiveMessage(msgFrom, msg, id);
@@ -47,30 +120,38 @@ namespace SignalRChat.Hubs
 
             string[] Exceptional = new string[1];
             Exceptional[0] = id;
-            Clients.All.SendAsync("receiveMessage", "ChatHub", msg, list);
+            Clients.All.SendAsync("ReceiveMessage", "ChatHub", msg, list);
             //cli.Caller.receiveMessage("RU", msg, list);
             //cli.AllExcept(Exceptional).receiveMessage("NewConnection", username + " " + id, count);
-            Clients.AllExcept(Exceptional).SendAsync("receiveMessage", "ChatHub", username + " " + id);
+            Clients.AllExcept(Exceptional).SendAsync("ReceiveMessage", "ChatHub", username + " " + id);
         }
         
         public override Task OnConnectedAsync()
         {
-            //string username = Context.QueryString["username"].ToString();
-            string clientId = Context.ConnectionId;
-            string data = clientId;
-            string count = "1";
-            //try
-            //{
-            //    count = GetCount().ToString();
-            //}
-            //catch (Exception d)
-            //{
-            //    count = d.Message;
-            //}
-            //var a = cli.Client(clientId);
-            //var b = cli.Caller;
-            Clients.All.SendAsync("receiveMessage", "ChatHub", data, count);
-            //cli.Caller.receiveMessage("ChatHub", data, count);
+            //var UserName = _iHttpContext.HttpContext.User.Identity.Name;
+            var UserName = "piroska";
+            var User = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).SingleOrDefault();
+            var AgreedMeeting = _context.AgreedMeeting.Where(am => am.AgreedMeetingID == User.AgreedMeetingID).SingleOrDefault();
+
+            var ConnectionId = Context.ConnectionId;
+
+            if (User == null)
+            {
+                throw new System.Exception("user doesn't exist");
+            }
+
+            var history = _context.ChatMessage.Where(m => m.AgreedMeeting.AgreedMeetingID == AgreedMeeting.AgreedMeetingID).Select(cm =>
+            new ChatMessage
+            {
+                Time = cm.Time,
+                Name = cm.Name,
+                Message = cm.Message,
+                AgreedMeetingID = cm.AgreedMeetingID,
+                ConnectionId = cm.ConnectionId
+            }).ToList();
+
+            //Clients.All.SendAsync("receiveMessage", "ChatHub", data, count);
+            Clients.All.SendAsync("History", "povijesne poruke ....");
             return base.OnConnectedAsync();
         }
 

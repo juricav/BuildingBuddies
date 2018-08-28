@@ -22,7 +22,8 @@
                 .withUrl('/chat')
                 .build();
 
-            connection.on('broadcastMessage', function (name, message) {
+            // nešto što se događa na broadcast
+            connection.on('BroadcastMessage', function (name, message) {
                 var encodedName = name;
                 var encodedMsg = message;
 
@@ -31,12 +32,33 @@
                 document.getElementById('discussion').appendChild(liElement);
             });
 
+            // primanje poruke i prikaz korisniku
+            connection.on('Send', function (message) {
+                console.log("recieve " + message);
+                var encodedMsg = message;
+
+                var liElement = document.createElement('li');
+                liElement.innerHTML = encodedMsg;
+                document.getElementById('discussion').appendChild(liElement);
+            });
+
+            // napraviti dohvat svih poruka i kreirati history
+            // poziva se na onconnected
+            connection.on('History', function (messages) {
+                console.log('recieved history from the hub');
+                console.log(messages);
+            });
+            
+            // stavlja se event na slanje i možda sprema username ili nešto
+            // nekako dodati dohvat historya kod prvog spajanja
             connection.start()
                 .then(function () {
                     console.log('connection started');
                     document.getElementById('sendmessage').addEventListener('click', function (event) {
-                        connection.invoke('Send_PrivateMessage', name, messageInput.value, $("#to").val());
-                        console.log('sent');
+                        console.log('sending... ');
+                        console.log(messageInput.value);
+                        connection.invoke('Send', messageInput.value);
+
                         // Clear text box and reset focus for next comment.
                         messageInput.value = '';
                         messageInput.focus();

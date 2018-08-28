@@ -14,11 +14,9 @@ namespace BuildingBuddies.Pages.MeetingChat
 {
     public class Chat : PageModel
     {
-
         // samo da imam primjer za pravi chat
         private readonly BuildingBuddiesContext _context;
         private readonly IHttpContextAccessor _iHttpContext;
-
 
         public Chat(BuildingBuddiesContext context, IHttpContextAccessor iHttpContext)
         {
