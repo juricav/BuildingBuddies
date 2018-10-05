@@ -86,6 +86,7 @@ namespace SignalRChat.Hubs
         //    }).ToListAsync();
         //}
 
+        // poslati username u touserid- u bazi naći connection id za tog korisnika
         public void Send_PrivateMessage(string msgFrom, string msg, string touserid)
         {
             var id = Context.ConnectionId;
@@ -151,7 +152,7 @@ namespace SignalRChat.Hubs
             }).ToList();
 
             //Clients.All.SendAsync("receiveMessage", "ChatHub", data, count);
-            Clients.All.SendAsync("History", "povijesne poruke ....");
+            Clients.All.SendAsync("History", "povijesne poruke ...." + ConnectionId);
             return base.OnConnectedAsync();
         }
 

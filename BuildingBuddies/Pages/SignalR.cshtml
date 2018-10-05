@@ -24,6 +24,7 @@
 
             // nešto što se događa na broadcast
             connection.on('BroadcastMessage', function (name, message) {
+                console.log("Broadcast " + name + ": " + message);
                 var encodedName = name;
                 var encodedMsg = message;
 
@@ -34,7 +35,7 @@
 
             // primanje poruke i prikaz korisniku
             connection.on('Send', function (message) {
-                console.log("recieve " + message);
+                console.log("Send: " + message);
                 var encodedMsg = message;
 
                 var liElement = document.createElement('li');
@@ -45,7 +46,7 @@
             // napraviti dohvat svih poruka i kreirati history
             // poziva se na onconnected
             connection.on('History', function (messages) {
-                console.log('recieved history from the hub');
+                console.log('History');
                 console.log(messages);
             });
             
@@ -57,7 +58,7 @@
                     document.getElementById('sendmessage').addEventListener('click', function (event) {
                         console.log('sending... ');
                         console.log(messageInput.value);
-                        connection.invoke('Send', messageInput.value);
+                        connection.invoke('Send_PrivateMessage', name, messageInput.value, to.value);
 
                         // Clear text box and reset focus for next comment.
                         messageInput.value = '';
