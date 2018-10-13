@@ -69,17 +69,17 @@ namespace BuildingBuddies
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
-            app.UseSignalR(routes =>
-            {
-                routes.MapHub<ChatHub>("/chat");                
-            });
+            app.UseAuthentication();
             
             app.UseHangfireDashboard();
             app.UseHangfireServer();
-
-            app.UseAuthentication();
             
             app.UseMvc();
+
+            app.UseSignalR(routes =>
+            {
+                routes.MapHub<ChatHub>("/chat");
+            });
         }
     }
 }

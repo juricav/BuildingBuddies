@@ -60,14 +60,14 @@ namespace BuildingBuddies.Pages.MeetingChat
                 return Page();
             }
 
-            Item.UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //Item.UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             Item.Name = this.User.FindFirstValue(ClaimTypes.Name);
 
             AgreedMeeting SourceMeeting = await _context.AgreedMeeting.Where(am => am.Link == meetingLink).FirstOrDefaultAsync();
 
             Item.AgreedMeetingID = SourceMeeting.AgreedMeetingID;
             //Item.UserID = 1;
-            Item.UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //Item.UserId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             
             _context.ChatMessage.Add(Item);
             await _context.SaveChangesAsync();

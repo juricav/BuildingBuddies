@@ -13,9 +13,7 @@
         $(document).ready(function () {
 
             var messageInput = document.getElementById('message');
-
-            var name = prompt('Enter your name:', '');
-
+            
             messageInput.focus();
 
             var connection = new signalR.HubConnectionBuilder()
@@ -29,7 +27,7 @@
                 var encodedMsg = message;
 
                 var liElement = document.createElement('li');
-                liElement.innerHTML = '<strong>' + encodedName + '</strong>:&nbsp;&nbsp;' + encodedMsg;
+                liElement.innerHTML = '<strong>' + encodedName  + '</strong>:&nbsp;&nbsp;' + encodedMsg;
                 document.getElementById('discussion').appendChild(liElement);
             });
 
@@ -38,27 +36,35 @@
                 console.log("Send: " + message);
                 var encodedMsg = message;
 
+                console.log('send funkcija');
                 var liElement = document.createElement('li');
                 liElement.innerHTML = encodedMsg;
                 document.getElementById('discussion').appendChild(liElement);
             });
 
-            // napraviti dohvat svih poruka i kreirati history
             // poziva se na onconnected
+            // treba ispisati poruke (prima ih kao neku listu)
             connection.on('History', function (messages) {
                 console.log('History');
                 console.log(messages);
+
+                messages.forEach(function (message) {
+                    var liElement = document.createElement('li');
+                    liElement.innerHTML = '<strong>' + message.name + '</strong>:&nbsp;&nbsp;' + message.message;
+                    document.getElementById('discussion').appendChild(liElement);
+                });
+
+                
             });
             
-            // stavlja se event na slanje i možda sprema username ili nešto
-            // nekako dodati dohvat historya kod prvog spajanja
+            // stavlja se event na slanje i dohvaća povijest poruka
             connection.start()
                 .then(function () {
                     console.log('connection started');
                     document.getElementById('sendmessage').addEventListener('click', function (event) {
                         console.log('sending... ');
                         console.log(messageInput.value);
-                        connection.invoke('Send_PrivateMessage', name, messageInput.value, to.value);
+                        connection.invoke('SendMessage', messageInput.value);
 
                         // Clear text box and reset focus for next comment.
                         messageInput.value = '';
@@ -77,7 +83,6 @@
 
     <div class="container">
         <span id="connId"></span>
-        <input type="text" id="to" placeholder="Send to"/>
         <input type="text" id="message" placeholder="Text"/>
         <input type="button" id="sendmessage" value="Send" />
         <ul id="discussion"></ul>

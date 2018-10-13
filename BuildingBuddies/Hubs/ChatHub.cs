@@ -21,261 +21,77 @@ namespace SignalRChat.Hubs
             _iHttpContext = iHttpContext;           
         }
 
-        public void CreateNewMessage(ChatMessage message)
+        public User GetCurrentUser ()
         {
-            _context.ChatMessage.Add(message);
-            _context.SaveChangesAsync();
+            string UserName = _iHttpContext.HttpContext.User.Identity.Name;
+            User User = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).SingleOrDefault();
+
+            return User;
         }
-
-        public IEnumerable<ChatMessage> GetAllChatMessages(int agreedMeetingId)
+                
+        public void SendMessage(string messageText)
         {
-            return _context.ChatMessage.Where(m => m.AgreedMeetingID == agreedMeetingId);
-        }
+            User User = GetCurrentUser();
 
-        public Task Send(string message)
-        {
-            // nalazimo pošiljatelja, njegov agreedMeeting i šaljemo u grupu
-            //var UserName = _iHttpContext.HttpContext.User.Identity.Name;
-            var UserName = "piroska";
-            var User = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).SingleOrDefault();
-            var AgreedMeeting = _context.AgreedMeeting.Where(am => am.AgreedMeetingID == User.AgreedMeetingID).SingleOrDefault();
+            User Reciever = _context.User.Where(r => r.AgreedMeetingID == User.AgreedMeetingID && r.Id != User.Id).FirstOrDefault();
+            var RecieverId = Reciever.ConnectionID;
 
-            var ConnectionId = Context.ConnectionId;
-
-            if (User == null)
+            // šalje se poruka pošiljatelju da ima svoju kopiju
+            Clients.Client(User.ConnectionID).SendAsync("BroadcastMessage", User.UserName, messageText);
+            // šaljemo drugom članu, ako ima connectionId
+            if(RecieverId != null)
             {
-                throw new System.Exception("user doesn't exist");
+                Clients.Client(RecieverId).SendAsync("BroadcastMessage", User.UserName, messageText);
             }
-
-            var ChatMessage = new ChatMessage
+            
+            // poruka se sprema u bazu
+            var DbMessage = new ChatMessage
             {
-                Time = DateTime.Now,
+                Message = messageText,
                 Name = User.UserName,
-                Message = message,
-                AgreedMeetingID = AgreedMeeting.AgreedMeetingID,
-                ConnectionId = ConnectionId
+                Time = DateTime.Now,
+                AgreedMeetingID = User.AgreedMeetingID
             };
-
-            CreateNewMessage(ChatMessage);
-            return Clients.All.SendAsync("Send", message);
-            //return Clients.Group(ConnectionId).SendAsync("Send", ChatMessage.Name, ChatMessage);
-            //Clients.All.SendAsync("broadcastMessage", name, message);
-        }
-
-        //public async Task JoinGroup()
-        //{
-        //    var UserName = _iHttpContext.HttpContext.User.Identity.Name;
-        //    var User = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).SingleOrDefault();
-        //    var AgreedMeeting = _context.AgreedMeeting.Where(am => am.GetUsers().Contains(User)).SingleOrDefault();
-
-        //    var ConnectionId = Context.ConnectionId;
-
-        //    if (User == null)
-        //    {
-        //        throw new System.Exception("user doesn't exist");
-        //    }
-
-        //    var history = await _context.ChatMessage.Where(m => m.AgreedMeeting.AgreedMeetingID == AgreedMeeting.AgreedMeetingID).Select(cm => 
-        //    new ChatMessage
-        //    {
-        //        Time = cm.Time,
-        //        Name = cm.Name,
-        //        Message = cm.Message,
-        //        AgreedMeetingID = cm.AgreedMeetingID,
-        //        ConnectionId = cm.ConnectionId
-        //    }).ToListAsync();
-        //}
-
-        // poslati username u touserid- u bazi naći connection id za tog korisnika
-        public void Send_PrivateMessage(string msgFrom, string msg, string touserid)
-        {
-            var id = Context.ConnectionId;
-            // šaljemo korisniku koji šalje da ima svoju kopiju
-            Clients.Client(id).SendAsync("BroadcastMessage", msgFrom, msg);
-            // šaljemo korisniku kojem šalje da i on vidi
-            Clients.Client(touserid).SendAsync("BroadcastMessage", msgFrom, msg);
-
-            //cli.Caller.receiveMessage(msgFrom, msg, touserid);
-            //cli.Client(touserid).receiveMessage(msgFrom, msg, id);
-        }
-
-        [HubMethodName("hubconnect")]
-        public void Get_Connect(string username, string userId, string connectionId)
-        {
-            string count = "1";
-            string msg = "testgetconnect";
-            string list = "dsada";
-
-            //try
-            //{
-            //    count = GetCount().ToString();
-            //    msg = updaterec(username, userId, connectionId);
-            //    list = GetUsers(username);
-            //}
-            //catch(Exception e)
-            //{
-            //    msg = "DB Error " + e.Message;
-            //}
-
-            var id = Context.ConnectionId;
-
-            string[] Exceptional = new string[1];
-            Exceptional[0] = id;
-            Clients.All.SendAsync("ReceiveMessage", "ChatHub", msg, list);
-            //cli.Caller.receiveMessage("RU", msg, list);
-            //cli.AllExcept(Exceptional).receiveMessage("NewConnection", username + " " + id, count);
-            Clients.AllExcept(Exceptional).SendAsync("ReceiveMessage", "ChatHub", username + " " + id);
+            
+            _context.ChatMessage.Add(DbMessage);
+            _context.SaveChanges();
         }
         
         public override Task OnConnectedAsync()
         {
-            //var UserName = _iHttpContext.HttpContext.User.Identity.Name;
-            var UserName = "piroska";
-            var User = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).SingleOrDefault();
-            var AgreedMeeting = _context.AgreedMeeting.Where(am => am.AgreedMeetingID == User.AgreedMeetingID).SingleOrDefault();
+            User User = GetCurrentUser();
+            string ConnectionId = Context.ConnectionId;
 
-            var ConnectionId = Context.ConnectionId;
+            // spremanje connectionId u bazu
+            User.ConnectionID = ConnectionId;
+            _context.Update(User);
+            _context.SaveChanges();
 
-            if (User == null)
-            {
-                throw new System.Exception("user doesn't exist");
-            }
-
-            var history = _context.ChatMessage.Where(m => m.AgreedMeeting.AgreedMeetingID == AgreedMeeting.AgreedMeetingID).Select(cm =>
+            // dohvat svih poruka za meetingId po redoslijedu
+            var history = _context.ChatMessage.Where(m => m.AgreedMeeting.AgreedMeetingID == User.AgreedMeetingID).Select(cm =>
             new ChatMessage
             {
                 Time = cm.Time,
                 Name = cm.Name,
-                Message = cm.Message,
-                AgreedMeetingID = cm.AgreedMeetingID,
-                ConnectionId = cm.ConnectionId
-            }).ToList();
+                Message = cm.Message
+            }).ToList().OrderBy(cm => cm.Time);
 
-            //Clients.All.SendAsync("receiveMessage", "ChatHub", data, count);
-            Clients.All.SendAsync("History", "povijesne poruke ...." + ConnectionId);
+            // slanje poruka za ispis povijesti
+            Clients.All.SendAsync("History", history);
+
             return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception e)
         {
-            //string count = "";
-            //string msg = "";
+            // brisanje connectionID-a
+            User User = GetCurrentUser();
 
-            //string clientId = Context.ConnectionId;
-            //DeleteRecord(clientId);
-
-            //try
-            //{
-            //    count = GetCount().ToString();
-            //}
-            //catch (Exception d)
-            //{
-            //    msg = "DB Error " + d.Message;
-            //}
-            //string[] Exceptional = new string[1];
-            //Exceptional[0] = clientId;
-            //cli.AllExcept(Exceptional).receiveMessage("NewConnection", clientId + " leave", count);
+            User.ConnectionID = string.Empty;
+            _context.Update(User);
+            _context.SaveChanges();
 
             return base.OnDisconnectedAsync(e);
-        }
-
-        //public string updaterec(string username, string userid, string connectionid)
-        //{
-        //    try
-        //    {
-        //        SqlCommand save = new SqlCommand("insert into [ChatUsers] values('" + username + "','" + userid + "','" + connectionid + "')", sqlcon);
-        //        sqlcon.Open();
-        //        int rs = save.ExecuteNonQuery();
-        //        sqlcon.Close();
-        //        return "saved";
-        //    }
-        //    catch (Exception d)
-        //    {
-        //        sqlcon.Close();
-        //        return d.Message;
-        //    }
-        //}
-
-        //public int GetCount()
-        //{
-        //    int count = 0;
-
-        //    try
-        //    {
-        //        SqlCommand getCount = new SqlCommand("select COUNT([UserName]) as TotalCount from [ChatUsers]", sqlcon);
-        //        sqlcon.Open();
-        //        count = int.Parse(getCount.ExecuteScalar().ToString());
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-        //    sqlcon.Close();
-        //    return count;
-        //}
-
-        //public bool DeleteRecord(string connectionid)
-        //{
-        //    bool result = false;
-
-        //    try
-        //    {
-        //        SqlCommand deleterec = new SqlCommand("delete from [ChatUsers] where ([ConnectionID]='" + connectionid + "')", sqlcon);
-        //        sqlcon.Open();
-        //        deleterec.ExecuteNonQuery();
-        //        result = true;
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-        //    sqlcon.Close();
-        //    return result;
-        //}
-
-        //public string GetUsers(string username)
-        //{
-        //    string list = "";
-
-        //    try
-        //    {
-        //        int count = GetCount();
-        //        SqlCommand listrec = new SqlCommand("select [UserName],[ConnectionID] from [ChatUSers] where ([UserName]<>'" + username + "')", sqlcon);
-        //        sqlcon.Open();
-        //        SqlDataReader reader = listrec.ExecuteReader();
-        //        reader.Read();
-
-        //        for (int i = 0; i < (count - 1); i++)
-        //        {
-        //            list += reader.GetValue(0).ToString() + " ( " + reader.GetValue(1).ToString() + " )#";
-        //            reader.Read();
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //    }
-        //    sqlcon.Close();
-        //    return list;
-        //}
-
-        //public void Create_Group(string GroupName)
-        //{
-
-        //}
-
-        //private string GetClientId()
-        //{
-        //    string clientId = "";
-        //    if (Context.QueryString["clientId"] != null)
-        //    {
-        //        // clientId passed from application 
-        //        clientId = this.Context.QueryString["clientId"];
-        //    }
-
-        //    if (string.IsNullOrEmpty(clientId.Trim()))
-        //    {
-        //        clientId = Context.ConnectionId;
-        //    }
-
-        //    return clientId;
-        //}
+        }        
     }
 }
