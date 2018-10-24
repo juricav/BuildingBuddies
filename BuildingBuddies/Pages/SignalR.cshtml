@@ -8,12 +8,13 @@
 <body>
     <script src="~/lib/signalr/signalr.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="~/css/chat.css">
 
     <script type="text/javascript">
         $(document).ready(function () {
 
             var messageInput = document.getElementById('message');
-            
+
             messageInput.focus();
 
             var connection = new signalR.HubConnectionBuilder()
@@ -27,8 +28,11 @@
                 var encodedMsg = message;
 
                 var liElement = document.createElement('li');
-                liElement.innerHTML = '<strong>' + encodedName  + '</strong>:&nbsp;&nbsp;' + encodedMsg;
+                liElement.innerHTML = '<strong>' + encodedName + '</strong>:&nbsp;&nbsp;' + encodedMsg;
+
                 document.getElementById('discussion').appendChild(liElement);
+                var divElem = document.getElementsByClassName('discussion')[0];
+                divElem.scrollTop = divElem.scrollHeight;
             });
 
             // primanje poruke i prikaz korisniku
@@ -54,9 +58,10 @@
                     document.getElementById('discussion').appendChild(liElement);
                 });
 
-                
+                var divElem = document.getElementsByClassName('discussion')[0];
+                divElem.scrollTop = divElem.scrollHeight;
             });
-            
+
             // stavlja se event na slanje i dohvaća povijest poruka
             connection.start()
                 .then(function () {
@@ -76,16 +81,18 @@
                     console.error(error.message);
                 });
         });
-        
+
     </script>
 
     <br /><br /><br /><br />
 
     <div class="container">
         <span id="connId"></span>
-        <input type="text" id="message" placeholder="Text"/>
-        <input type="button" id="sendmessage" value="Send" />
-        <ul id="discussion"></ul>
+        <div class="discussion">
+            <ul id="discussion"></ul>
+        </div>
+        <input type="text" id="message" placeholder="Text" class="textbox" />
+        <input type="button" id="sendmessage" value="Send" class="send-button" />
     </div>
 
 </body>

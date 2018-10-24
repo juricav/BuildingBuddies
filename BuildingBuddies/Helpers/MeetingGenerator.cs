@@ -19,26 +19,26 @@ namespace BuildingBuddies.Helpers
             _context = context;
         }
 
-        public async Task ConnectUsers (int meetingId)
+        public async Task ConnectUsers(int meetingId)
         {
             List<User> FreeUsers = await _context.User.Where(u => u.MeetingID == meetingId)
                                                         .OrderBy(u => rng.Next())
                                                         .ToListAsync();
 
-            LinkGenerator LinkGenerator = new LinkGenerator();
+            //LinkGenerator LinkGenerator = new LinkGenerator();
 
             if (FreeUsers.Count % 2 != 0)
             {
                 FreeUsers.RemoveAt(FreeUsers.Count - 1); // mičemo zadnjeg da ih bude paran broj
             }
 
-            for(int i = 0; i < FreeUsers.Count(); i+=2)
+            for (int i = 0; i < FreeUsers.Count(); i += 2)
             {
                 // generiramo AgreedMeeting i upisujemo njegov ID u 2 korisnika i šaljemo im mail
                 AgreedMeeting AgreedMeeting = new AgreedMeeting
                 {
-                    MeetingID = meetingId,
-                    Link = LinkGenerator.GenerateJoin()
+                    MeetingID = meetingId
+                    //Link = LinkGenerator.GenerateJoin()
                 };
 
                 _context.AgreedMeeting.Add(AgreedMeeting);
@@ -46,34 +46,34 @@ namespace BuildingBuddies.Helpers
                 _context.SaveChanges();
 
                 AgreedMeeting NewAgreedMeeting = _context.AgreedMeeting.Where(am => am.MeetingID == meetingId).LastOrDefault();
-                
+
                 User FirstUser = (from x in _context.User
-                           where x.Id == FreeUsers[i].Id
-                           select x).First();
+                                  where x.Id == FreeUsers[i].Id
+                                  select x).First();
                 User SecondUser = (from x in _context.User
-                                  where x.Id == FreeUsers[i+1].Id && x.DepartmentID != FirstUser.DepartmentID && x.MeetingID == FirstUser.MeetingID
+                                   where x.Id == FreeUsers[i + 1].Id && x.DepartmentID != FirstUser.DepartmentID && x.MeetingID == FirstUser.MeetingID
                                    select x).First();
 
                 FirstUser.AgreedMeetingID = NewAgreedMeeting.AgreedMeetingID;
                 SecondUser.AgreedMeetingID = NewAgreedMeeting.AgreedMeetingID;
-                
+
                 _context.SaveChanges();
             }
-            
+
             MailSender MailSender = new MailSender();
-            
+
             foreach (User u in FreeUsers)
             {
                 string SecondUsername = (from x in _context.User
-                               where x.AgreedMeetingID == u.AgreedMeetingID && x.Id != u.Id
+                                         where x.AgreedMeetingID == u.AgreedMeetingID && x.Id != u.Id
                                          select x).First().UserName;
-                string meetingLink = (from x in _context.AgreedMeeting
-                                      where x.AgreedMeetingID == u.AgreedMeetingID
-                                      select x).First().Link;
+                //string meetingLink = (from x in _context.AgreedMeeting
+                //                      where x.AgreedMeetingID == u.AgreedMeetingID
+                //                      select x).First().Link;
 
                 //await MailSender.Send(u.Email, $"Dragi {u.UserName}", $"Spojeni ste s korisnikom <a href='https://localhost:44315/MeetingChat/Chat/{meetingLink}'>{SecondUsername}</a>");
 
-                await MailSender.Send(u.Email, $"Dragi {u.UserName}", $"Spojeni ste s korisnikom {SecondUsername}, link: https://localhost:44315/MeetingChat/Chat/{meetingLink}");
+                await MailSender.Send(u.Email, $"Dragi {u.UserName}", $"Spojeni ste s korisnikom {SecondUsername}, link: https://localhost:44315/signalr");
             }
         }
 
@@ -83,7 +83,7 @@ namespace BuildingBuddies.Helpers
             List<Meeting> Meetings = await _context.Meeting.Where(m => m.EndDate < DateTime.Now && m.MeetingEnded != true)
                                                         .ToListAsync();
 
-            if(Meetings.Count() > 0)
+            if (Meetings.Count() > 0)
             {
                 foreach (Meeting m in Meetings)
                 {

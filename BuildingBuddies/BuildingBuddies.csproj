@@ -5,8 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\MeetingChat\**" />
+    <Content Remove="Pages\MeetingChat\**" />
+    <EmbeddedResource Remove="Pages\MeetingChat\**" />
+    <None Remove="Pages\MeetingChat\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Models\Chat.cs" />
     <Compile Remove="Models\Location.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\js\chat.js" />
   </ItemGroup>
 
   <ItemGroup>
