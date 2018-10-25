@@ -74,13 +74,23 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
 
             var user = await _context.User.Where(u => u.NormalizedEmail == Input.Email.ToUpper()).FirstOrDefaultAsync();
 
+
+
             if (ModelState.IsValid && user != null)
             {                
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(user.NormalizedUserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
+
+                var confirmedEmail = user.EmailConfirmed;
+
                 if (result.Succeeded)
                 {
+                    if(!confirmedEmail)
+                    {
+                        ModelState.AddModelError(string.Empty, "You have to confirm your email to log in.");
+                        return Page();
+                    }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

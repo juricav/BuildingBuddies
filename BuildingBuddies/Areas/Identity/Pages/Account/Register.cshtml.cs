@@ -96,6 +96,12 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
             // traži se postoji li sastanak na tom linku
             Meeting SourceMeeting = await _context.Meeting.Where(m => m.Link.Contains(meetingLink)).FirstOrDefaultAsync();
 
+            // provjera da je u ispravnoj domeni
+            if(!Input.Email.Contains($"@{SourceMeeting.Domain}"))
+            {
+                ModelState.AddModelError("Email", "Email is not correct");
+            }
+
             if (ModelState.IsValid && SourceMeeting != null)
             {
                 var user = new User { UserName = LinkGenerator.GenerateRandomString(10), Email = Input.Email, DepartmentID = Input.DepartmentID, MeetingID = SourceMeeting.MeetingID };                  
@@ -115,10 +121,18 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
                             values: new { userId = user.Id, code = code },
                             protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        MailSender ms = new MailSender();
 
-                        await _signInManager.SignInAsync(user, isPersistent: false);
+                        var callback = HtmlEncoder.Default.Encode(callbackUrl);
+
+                        await ms.Send(Input.Email, "Confirm your email", callbackUrl);
+
+                        await ms.Send(Input.Email, "Confirm your email", $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
+
+                        //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                        //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+
+                        //await _signInManager.SignInAsync(user, isPersistent: false);
                         return LocalRedirect(returnUrl);
                     }
                     foreach (var error in result.Errors)
@@ -128,6 +142,8 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
                 }
                 else
                 {
+                    // If we got this far, something failed, redisplay form
+                    PopulateDepartmentsDropDownList(_context, meetingLink);
                     return Page();
                 }                
             }

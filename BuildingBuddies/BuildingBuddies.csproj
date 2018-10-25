@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Pages\Components\**" />
     <Compile Remove="Pages\MeetingChat\**" />
+    <Content Remove="Pages\Components\**" />
     <Content Remove="Pages\MeetingChat\**" />
+    <EmbeddedResource Remove="Pages\Components\**" />
     <EmbeddedResource Remove="Pages\MeetingChat\**" />
+    <None Remove="Pages\Components\**" />
     <None Remove="Pages\MeetingChat\**" />
   </ItemGroup>
 
