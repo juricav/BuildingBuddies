@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BuildingBuddies.Models;
+using System.Threading.Tasks;
 
 namespace BuildingBuddies.Pages.Meetings
 {
     public class DetailsModel : PageModel
     {
-        private readonly BuildingBuddies.Models.BuildingBuddiesContext _context;
+        private readonly BuildingBuddiesContext _context;
 
-        public DetailsModel(BuildingBuddies.Models.BuildingBuddiesContext context)
+        public DetailsModel(BuildingBuddiesContext context)
         {
             _context = context;
         }

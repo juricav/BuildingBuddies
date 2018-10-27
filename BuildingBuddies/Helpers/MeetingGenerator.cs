@@ -11,7 +11,6 @@ namespace BuildingBuddies.Helpers
     public class MeetingGenerator : PageModel
     {
         private static Random rng = new Random((int)DateTime.Now.Ticks);
-
         private readonly BuildingBuddiesContext _context;
 
         public MeetingGenerator(BuildingBuddiesContext context)
@@ -25,8 +24,6 @@ namespace BuildingBuddies.Helpers
                                                         .OrderBy(u => rng.Next())
                                                         .ToListAsync();
 
-            //LinkGenerator LinkGenerator = new LinkGenerator();
-
             if (FreeUsers.Count % 2 != 0)
             {
                 FreeUsers.RemoveAt(FreeUsers.Count - 1); // mičemo zadnjeg da ih bude paran broj
@@ -38,11 +35,9 @@ namespace BuildingBuddies.Helpers
                 AgreedMeeting AgreedMeeting = new AgreedMeeting
                 {
                     MeetingID = meetingId
-                    //Link = LinkGenerator.GenerateJoin()
                 };
 
                 _context.AgreedMeeting.Add(AgreedMeeting);
-
                 _context.SaveChanges();
 
                 AgreedMeeting NewAgreedMeeting = _context.AgreedMeeting.Where(am => am.MeetingID == meetingId).LastOrDefault();
@@ -68,8 +63,8 @@ namespace BuildingBuddies.Helpers
                                          where x.AgreedMeetingID == u.AgreedMeetingID && x.Id != u.Id
                                          select x).First().UserName;
 
-                await MailSender.Send(u.Email, 
-                                    $"You have been connected with a buddy", 
+                await MailSender.Send(u.Email,
+                                    $"You have been connected with a buddy",
                                     $"Dear {u.UserName}, <br/>your buddy is {SecondUsername}! You can log in <a href='https://localhost:44315/signalr'>here</a> to agree on a meeting place and time.");
             }
         }

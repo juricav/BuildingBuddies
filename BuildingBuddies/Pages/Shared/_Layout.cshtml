@@ -42,6 +42,17 @@
                             <li><a asp-page="/Departments/Index">Departments</a></li>
                             <li><a asp-page="/Feedback/Index">Meeting feedback (TODO)</a></li>
                         }
+                        else
+                        {
+                            if ((bool)ViewData["Connected"] == true)
+                            {
+                                <li><a asp-page="/signalr">Chat</a></li>
+                            }
+                            else
+                            {
+                                <li><a asp-page="/Index">You are not yet connected</a></li>
+                            }
+                        }
                     }
                 </ul>
                 <partial name="_LoginPartial" />

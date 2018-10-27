@@ -165,8 +165,6 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
                         if (result.Succeeded)
                         {
                             SendConfirmationEmail(user);
-                            TempData["UserMessageTitle"] = "Success!";
-                            TempData["UserMessageText"] = "Please check your inbox for the confirmation mail.";
                             return LocalRedirect(returnUrl);
                         }
 

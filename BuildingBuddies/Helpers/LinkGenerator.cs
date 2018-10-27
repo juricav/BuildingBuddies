@@ -12,22 +12,14 @@ namespace BuildingBuddies.Helpers
             var Seed = (int)DateTime.Now.Ticks;
             var Random = new Random(Seed);
 
-            for(int i = 0; i < Length; i++)
+            for (int i = 0; i < Length; i++)
             {
                 StringChars[i] = Chars[Random.Next(Chars.Length)];
             }
 
             var GeneratedIdentifier = new String(StringChars);
-            
+
             return GeneratedIdentifier;
-        }
-
-        public string GenerateJoin()
-        {
-            //var BaseUrl = "https://localhost:44315/AgreedMeetings";
-            var Length = 10;
-
-            return GenerateRandomString(Length);
         }
     }
 }

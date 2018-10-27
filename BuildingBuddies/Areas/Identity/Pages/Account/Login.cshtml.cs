@@ -74,12 +74,21 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
 
             var user = await _context.User.Where(u => u.NormalizedEmail == Input.Email.ToUpper()).FirstOrDefaultAsync();
 
-
+            if(user?.MeetingOrganizer == true)
+            {
+                returnUrl += "Meetings";
+            }
+            else if (user?.AgreedMeetingID != null)
+            {
+                returnUrl += "signalr";
+            }
+            else
+            {
+                returnUrl += "Countdown";
+            }
 
             if (ModelState.IsValid && user != null)
             {                
-                // This doesn't count login failures towards account lockout
-                // To enable password failures to trigger account lockout, set lockoutOnFailure: true
                 var result = await _signInManager.PasswordSignInAsync(user.NormalizedUserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
 
                 var confirmedEmail = user.EmailConfirmed;

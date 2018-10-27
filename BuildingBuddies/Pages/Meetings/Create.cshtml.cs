@@ -56,7 +56,6 @@ namespace BuildingBuddies.Pages.Meetings
                 await _context.SaveChangesAsync();
 
                 return RedirectToPage("./Details", new { id = Meeting.MeetingID });
-
             }
 
             return Page();

@@ -19,7 +19,7 @@ namespace BuildingBuddies.Pages.Departments
             _iHttpContext = iHttpContext;
         }
 
-        public IList<Department> Department { get;set; }
+        public IList<Department> Department { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -37,7 +37,7 @@ namespace BuildingBuddies.Pages.Departments
 
             }
 
-            
+
         }
     }
 }

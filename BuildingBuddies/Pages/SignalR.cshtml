@@ -47,10 +47,16 @@
             });
 
             // poziva se na onconnected
-            // treba ispisati poruke (prima ih kao neku listu)
+            // treba ispisati poruke (prima ih kao neku listu)            
             connection.on('History', function (messages) {
                 console.log('History');
                 console.log(messages);
+
+                // prije toga briše postojeće za svaki slučaj
+                var myNode = document.getElementById('discussion');
+                while (myNode.firstChild) {
+                    myNode.removeChild(myNode.firstChild);
+                }
 
                 messages.forEach(function (message) {
                     var liElement = document.createElement('li');

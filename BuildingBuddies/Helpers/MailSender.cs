@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace BuildingBuddies.Helpers
@@ -24,10 +23,11 @@ namespace BuildingBuddies.Helpers
             using (var Message = new MailMessage(Sender, reciever)
             {
                 Subject = subject,
-                Body = body,                
+                Body = body,
                 IsBodyHtml = true
             })
-                await SmtpClient.SendMailAsync(Message);
+
+            await SmtpClient.SendMailAsync(Message);
         }
     }
 }

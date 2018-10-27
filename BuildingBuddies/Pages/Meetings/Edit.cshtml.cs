@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using BuildingBuddies.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BuildingBuddies.Pages.Meetings
 {
@@ -42,7 +39,7 @@ namespace BuildingBuddies.Pages.Meetings
         {
             var currentMeeting = _context.Meeting.Where(m => m.MeetingID == Meeting.MeetingID).FirstOrDefault();
 
-            if(currentMeeting.EndDate >= Meeting.EndDate)
+            if (currentMeeting.EndDate >= Meeting.EndDate)
             {
                 ModelState.AddModelError("Wrong end date", "The end date can't be moved back");
             }

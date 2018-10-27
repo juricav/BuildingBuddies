@@ -63,7 +63,7 @@ namespace SignalRChat.Hubs
             User.ConnectionID = ConnectionId;
             _context.Update(User);
             _context.SaveChanges();
-
+            
             // dohvat svih poruka za meetingId po redoslijedu
             var history = _context.ChatMessage.Where(m => m.AgreedMeeting.AgreedMeetingID == User.AgreedMeetingID).Select(cm =>
             new ChatMessage

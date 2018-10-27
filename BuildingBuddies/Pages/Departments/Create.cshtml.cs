@@ -39,13 +39,12 @@ namespace BuildingBuddies.Pages.Departments
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if(Department.Meeting == null)
+            if (Department.Meeting == null)
             {
                 ModelState.AddModelError("Department is empty", "Please, choose or create a Meeting first.");
             }
             if (!ModelState.IsValid)
             {
-
                 return Page();
             }
 

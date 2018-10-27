@@ -33,18 +33,18 @@ namespace BuildingBuddies.Pages
                 var LoggedUser = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).FirstOrDefault();
                 var MeetingOrganizer = LoggedUser.MeetingOrganizer;
 
-                if (MeetingOrganizer == true)
+                ViewData.Add("MeetingOrganizer", MeetingOrganizer);
+
+                var connected = false;
+
+                if (LoggedUser.AgreedMeetingID != null)
                 {
-                    ViewData.Add("MeetingOrganizer", true);
+                    connected = true;
                 }
-                else
-                {
-                    ViewData.Add("MeetingOrganizer", false);
-                }
+
+                ViewData.Add("Connected", connected);
             }
             return Page();
         }
     }
-
-    
 }
