@@ -10,95 +10,24 @@
     <script src="~/lib/jquery/dist/jquery.js"></script>
     <link rel="stylesheet" type="text/css" href="~/css/chat.css">
 
-    <script type="text/javascript">
-        $(document).ready(function () {
+    <script src="~/js/signalR.js"></script>
 
-            var messageInput = document.getElementById('message');
-
-            messageInput.focus();
-
-            var connection = new signalR.HubConnectionBuilder()
-                .withUrl('/chat')
-                .build();
-
-            // nešto što se događa na broadcast
-            connection.on('BroadcastMessage', function (name, message) {
-                console.log("Broadcast " + name + ": " + message);
-                var encodedName = name;
-                var encodedMsg = message;
-
-                var liElement = document.createElement('li');
-                liElement.innerHTML = '<strong>' + encodedName + '</strong>:&nbsp;&nbsp;' + encodedMsg;
-
-                document.getElementById('discussion').appendChild(liElement);
-                var divElem = document.getElementsByClassName('discussion')[0];
-                divElem.scrollTop = divElem.scrollHeight;
-            });
-
-            // primanje poruke i prikaz korisniku
-            connection.on('Send', function (message) {
-                console.log("Send: " + message);
-                var encodedMsg = message;
-
-                console.log('send funkcija');
-                var liElement = document.createElement('li');
-                liElement.innerHTML = encodedMsg;
-                document.getElementById('discussion').appendChild(liElement);
-            });
-
-            // poziva se na onconnected
-            // treba ispisati poruke (prima ih kao neku listu)            
-            connection.on('History', function (messages) {
-                console.log('History');
-                console.log(messages);
-
-                // prije toga briše postojeće za svaki slučaj
-                var myNode = document.getElementById('discussion');
-                while (myNode.firstChild) {
-                    myNode.removeChild(myNode.firstChild);
-                }
-
-                messages.forEach(function (message) {
-                    var liElement = document.createElement('li');
-                    liElement.innerHTML = '<strong>' + message.name + '</strong>:&nbsp;&nbsp;' + message.message;
-                    document.getElementById('discussion').appendChild(liElement);
-                });
-
-                var divElem = document.getElementsByClassName('discussion')[0];
-                divElem.scrollTop = divElem.scrollHeight;
-            });
-
-            // stavlja se event na slanje i dohvaća povijest poruka
-            connection.start()
-                .then(function () {
-                    console.log('connection started');
-                    document.getElementById('sendmessage').addEventListener('click', function (event) {
-                        console.log('sending... ');
-                        console.log(messageInput.value);
-                        connection.invoke('SendMessage', messageInput.value);
-
-                        // Clear text box and reset focus for next comment.
-                        messageInput.value = '';
-                        messageInput.focus();
-                        event.preventDefault();
-                    });
-                })
-                .catch(error => {
-                    console.error(error.message);
-                });
-        });
-
-    </script>
-
-    <br /><br /><br /><br />
-
-    <div class="container">
-        <span id="connId"></span>
-        <div class="discussion">
-            <ul id="discussion"></ul>
+    <div class="chat_window">
+        <div class="top_menu">
+            <div class="buttons">
+            </div>
+            <div class="title">Chat</div>
         </div>
-        <input type="text" id="message" placeholder="Text" class="textbox" />
-        <input type="button" id="sendmessage" value="Send" class="send-button" />
+        <ul id="discussion" class="messages"></ul>
+        <div class="bottom_wrapper clearfix">
+            <div class="message_input_wrapper">
+                <input type="text" class="message_input" id="message" placeholder="Type your message here..." />
+            </div>
+            <div id="sendmessage" class="send_message">
+                <div class="icon"></div>
+                <div class="text">Send</div>
+            </div>
+        </div>
     </div>
 
 </body>

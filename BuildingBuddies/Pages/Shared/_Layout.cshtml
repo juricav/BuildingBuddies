@@ -36,6 +36,11 @@
                             ViewData["MeetingOrganizer"] = false;
                         }
 
+                        if (@ViewData["Connected"] == null)
+                        {
+                            ViewData["Connected"] = false;
+                        }
+
                         if ((bool)@ViewData["MeetingOrganizer"] == true)
                         {
                             <li><a asp-page="/Meetings/Index">Meetings</a></li>
@@ -64,10 +69,6 @@
 
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; 2018 - BuildingBuddies</p>
-        </footer>
     </div>
 
     <environment include="Development">

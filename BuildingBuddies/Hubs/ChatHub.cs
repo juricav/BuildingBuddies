@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -34,18 +35,18 @@ namespace SignalRChat.Hubs
             var RecieverId = Reciever.ConnectionID;
 
             // šalje se poruka pošiljatelju da ima svoju kopiju
-            Clients.Client(User.ConnectionID).SendAsync("BroadcastMessage", User.UserName, messageText);
+            Clients.Client(User.ConnectionID).SendAsync("BroadcastMessage", User.UserName, messageText, "right");
             // šaljemo drugom članu, ako ima connectionId
             if(RecieverId != null)
             {
-                Clients.Client(RecieverId).SendAsync("BroadcastMessage", User.UserName, messageText);
+                Clients.Client(RecieverId).SendAsync("BroadcastMessage", User.UserName, messageText, "left");
             }
             
             // poruka se sprema u bazu
             var DbMessage = new ChatMessage
             {
                 Message = messageText,
-                Name = User.UserName,
+                Name = User.NormalizedUserName,
                 Time = DateTime.Now,
                 AgreedMeetingID = User.AgreedMeetingID
             };
@@ -65,20 +66,23 @@ namespace SignalRChat.Hubs
             _context.SaveChanges();
             
             // dohvat svih poruka za meetingId po redoslijedu
-            var history = _context.ChatMessage.Where(m => m.AgreedMeeting.AgreedMeetingID == User.AgreedMeetingID).Select(cm =>
-            new ChatMessage
+            var messages = _context.ChatMessage.Where(m => m.AgreedMeeting.AgreedMeetingID == User.AgreedMeetingID).Select(cm =>
+            new ChatMessageDirection
             {
                 Time = cm.Time,
                 Name = cm.Name,
-                Message = cm.Message
+                Message = cm.Message,
+                Direction = cm.Name == User.NormalizedUserName ? "right" : "left"
             }).ToList().OrderBy(cm => cm.Time);
-
+            
             // slanje poruka za ispis povijesti
-            Clients.All.SendAsync("History", history);
+            //Clients.All.SendAsync("History", messages);
+
+            Clients.Client(ConnectionId).SendAsync("History", messages);
 
             return base.OnConnectedAsync();
         }
-
+        
         public override Task OnDisconnectedAsync(Exception e)
         {
             // brisanje connectionID-a
