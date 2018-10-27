@@ -40,6 +40,13 @@ namespace BuildingBuddies.Pages.Meetings
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var currentMeeting = _context.Meeting.Where(m => m.MeetingID == Meeting.MeetingID).FirstOrDefault();
+
+            if(currentMeeting.EndDate >= Meeting.EndDate)
+            {
+                ModelState.AddModelError("Wrong end date", "The end date can't be moved back");
+            }
+
             if (!ModelState.IsValid)
             {
                 return Page();

@@ -25,24 +25,23 @@ namespace BuildingBuddies.Pages
         {
             MeetingGenerator MeetingGenerator = new MeetingGenerator(_context);
             RecurringJob.AddOrUpdate("uniqueId", () => MeetingGenerator.DailyBatch(), Cron.Daily);
-            
+
             var UserName = _iHttpContext.HttpContext.User.Identity.Name;
 
-            if(UserName != null)
+            if (UserName != null)
             {
                 var LoggedUser = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).FirstOrDefault();
-                var AgreedMeeting = _context.AgreedMeeting.Where(am => am.AgreedMeetingID == LoggedUser.AgreedMeetingID).FirstOrDefault();
+                var MeetingOrganizer = LoggedUser.MeetingOrganizer;
 
-                if(AgreedMeeting != null)
+                if (MeetingOrganizer == true)
                 {
-                    ViewData.Add("link", $"https://localhost:44315/MeetingChat/Chat/{AgreedMeeting.Link}");
+                    ViewData.Add("MeetingOrganizer", true);
+                }
+                else
+                {
+                    ViewData.Add("MeetingOrganizer", false);
                 }
             }
-            else
-            {
-                ViewData.Add("link", "niš");
-            }
-            
             return Page();
         }
     }

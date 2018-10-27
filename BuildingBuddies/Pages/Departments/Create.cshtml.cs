@@ -1,26 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BuildingBuddies.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using BuildingBuddies.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BuildingBuddies.Pages.Departments
 {
     public class CreateModel : PageModel
     {
-        private readonly BuildingBuddies.Models.BuildingBuddiesContext _context;
+        private readonly BuildingBuddiesContext _context;
+        private readonly IHttpContextAccessor _iHttpContext;
 
-        public CreateModel(BuildingBuddies.Models.BuildingBuddiesContext context)
+        public CreateModel(BuildingBuddiesContext context, IHttpContextAccessor iHttpContext)
         {
             _context = context;
+            _iHttpContext = iHttpContext;
         }
 
         public IActionResult OnGet()
         {
-        ViewData["MeetingID"] = new SelectList(_context.Meeting, "MeetingID", "MeetingID");
+            var UserName = _iHttpContext.HttpContext.User.Identity.Name;
+
+            if (UserName != null)
+            {
+                var LoggedUser = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).FirstOrDefault();
+
+                ViewData["MeetingID"] = new SelectList(_context.Meeting.Where(m => m.CreatorID == LoggedUser.Id).ToList(), "MeetingID", "Name");
+
+            }
+
             return Page();
         }
 
@@ -29,10 +39,19 @@ namespace BuildingBuddies.Pages.Departments
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if(Department.Meeting == null)
+            {
+                ModelState.AddModelError("Department is empty", "Please, choose or create a Meeting first.");
+            }
             if (!ModelState.IsValid)
             {
+
                 return Page();
             }
+
+            var meeting = _context.Meeting.Where(m => m.MeetingID == Department.Meeting.MeetingID).FirstOrDefault();
+            Department.Meeting = meeting;
+            Department.MeetingID = meeting.MeetingID;
 
             _context.Department.Add(Department);
             await _context.SaveChangesAsync();

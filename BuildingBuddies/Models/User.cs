@@ -8,6 +8,7 @@ namespace BuildingBuddies.Models
         public int? MeetingID { get; set; }
         public int? AgreedMeetingID { get; set; }
         public string ConnectionID { get; set; }
+        public bool? MeetingOrganizer { get; set; } = false;
         
         public Department Department { get; set; }
         public Meeting Meeting { get; set; }

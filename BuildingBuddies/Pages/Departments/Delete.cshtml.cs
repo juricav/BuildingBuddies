@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using BuildingBuddies.Models;
+using System.Threading.Tasks;
 
 namespace BuildingBuddies.Pages.Departments
 {
     public class DeleteModel : PageModel
     {
-        private readonly BuildingBuddies.Models.BuildingBuddiesContext _context;
+        private readonly BuildingBuddiesContext _context;
 
-        public DeleteModel(BuildingBuddies.Models.BuildingBuddiesContext context)
+        public DeleteModel(BuildingBuddiesContext context)
         {
             _context = context;
         }

@@ -21,7 +21,7 @@ namespace BuildingBuddies.Helpers
 
         public async Task ConnectUsers(int meetingId)
         {
-            List<User> FreeUsers = await _context.User.Where(u => u.MeetingID == meetingId)
+            List<User> FreeUsers = await _context.User.Where(u => u.MeetingID == meetingId && u.MeetingOrganizer == false)
                                                         .OrderBy(u => rng.Next())
                                                         .ToListAsync();
 
@@ -67,13 +67,10 @@ namespace BuildingBuddies.Helpers
                 string SecondUsername = (from x in _context.User
                                          where x.AgreedMeetingID == u.AgreedMeetingID && x.Id != u.Id
                                          select x).First().UserName;
-                //string meetingLink = (from x in _context.AgreedMeeting
-                //                      where x.AgreedMeetingID == u.AgreedMeetingID
-                //                      select x).First().Link;
 
-                //await MailSender.Send(u.Email, $"Dragi {u.UserName}", $"Spojeni ste s korisnikom <a href='https://localhost:44315/MeetingChat/Chat/{meetingLink}'>{SecondUsername}</a>");
-
-                await MailSender.Send(u.Email, $"Dragi {u.UserName}", $"Spojeni ste s korisnikom {SecondUsername}, link: https://localhost:44315/signalr");
+                await MailSender.Send(u.Email, 
+                                    $"You have been connected with a buddy", 
+                                    $"Dear {u.UserName}, <br/>your buddy is {SecondUsername}! You can log in <a href='https://localhost:44315/signalr'>here</a> to agree on a meeting place and time.");
             }
         }
 

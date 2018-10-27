@@ -1,4 +1,5 @@
-﻿using System.Net.Mail;
+﻿using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 
 namespace BuildingBuddies.Helpers
@@ -17,7 +18,7 @@ namespace BuildingBuddies.Helpers
                 //EnableSsl = true,
                 //Credentials = new NetworkCredential(Sender, "DebelaZirafa1!")
                 Host = "127.0.0.1",
-                Port = 2500
+                Port = 25
             };
 
             using (var Message = new MailMessage(Sender, reciever)

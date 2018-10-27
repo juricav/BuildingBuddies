@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BuildingBuddies.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using BuildingBuddies.Models;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace BuildingBuddies.Pages.Departments
 {
     public class EditModel : PageModel
     {
-        private readonly BuildingBuddies.Models.BuildingBuddiesContext _context;
+        private readonly BuildingBuddiesContext _context;
 
-        public EditModel(BuildingBuddies.Models.BuildingBuddiesContext context)
+        public EditModel(BuildingBuddiesContext context)
         {
             _context = context;
         }
@@ -36,7 +34,7 @@ namespace BuildingBuddies.Pages.Departments
             {
                 return NotFound();
             }
-           ViewData["MeetingID"] = new SelectList(_context.Meeting, "MeetingID", "MeetingID");
+            ViewData["MeetingID"] = new SelectList(_context.Meeting, "MeetingID", "Name");
             return Page();
         }
 

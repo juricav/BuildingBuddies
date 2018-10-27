@@ -7,8 +7,7 @@ namespace BuildingBuddies.Models
     {
         public BuildingBuddiesContext (DbContextOptions<BuildingBuddiesContext> options)
             : base(options)
-        {
-
+        {            
         }
 
         public DbSet<User> User { get; set; }

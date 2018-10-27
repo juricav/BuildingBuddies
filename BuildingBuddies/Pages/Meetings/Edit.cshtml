@@ -15,13 +15,18 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Meeting.MeetingID" />
             <div class="form-group">
+                <label asp-for="Meeting.Name" class="control-label"></label>
+                <input asp-for="Meeting.Name" class="form-control" />
+                <span asp-validation-for="Meeting.Name" class="text-danger"></span>
+            </div>
+            @*<div class="form-group">
                 <label asp-for="Meeting.Link" class="control-label"></label>
                 <input asp-for="Meeting.Link" class="form-control" />
                 <span asp-validation-for="Meeting.Link" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="Meeting.Domain" class="control-label"></label>
-                <input asp-for="Meeting.Domain" class="form-control" />
+                <input asp-for="Meeting.Domain" class="form-control" disabled />
                 <span asp-validation-for="Meeting.Domain" class="text-danger"></span>
             </div>
             <div class="form-group">

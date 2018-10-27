@@ -30,11 +30,19 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a asp-page="/Index">Home</a></li>
-                    <li><a asp-page="/Meetings/Index">Meetings</a></li>
-                    <li><a asp-page="/Departments/Index">Departments</a></li>
-                    <li><a asp-page="/AgreedMeetings/Index">Agreed Meetings</a></li>
-                    <li><a asp-page="/Chat">Chat</a></li>
+                    @{
+                        if (@ViewData["MeetingOrganizer"] == null)
+                        {
+                            ViewData["MeetingOrganizer"] = false;
+                        }
+
+                        if ((bool)@ViewData["MeetingOrganizer"] == true)
+                        {
+                            <li><a asp-page="/Meetings/Index">Meetings</a></li>
+                            <li><a asp-page="/Departments/Index">Departments</a></li>
+                            <li><a asp-page="/Feedback/Index">Meeting feedback (TODO)</a></li>
+                        }
+                    }
                 </ul>
                 <partial name="_LoginPartial" />
             </div>

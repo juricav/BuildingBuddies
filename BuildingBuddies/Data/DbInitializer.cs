@@ -24,8 +24,8 @@ namespace BuildingBuddies.Data
 
             var meetings = new Meeting[]
             {
-                new Meeting{Link="https://localhost:44315/Identity/Account/Register/fdsgef", Domain = "erstebank.com", CompanyName ="Erste banka", EndDate = DateTime.Parse("2018-07-06"), MeetingEnded = false },
-                new Meeting{Link="https://localhost:44315/Identity/Account/Register/fhbrg", Domain = "otp.com", CompanyName ="OTP banka", EndDate = DateTime.Parse("2018-08-25"), MeetingEnded = false }
+                new Meeting{Name= "Erste novi zaposlenici", Link="https://localhost:44315/Identity/Account/Register/fdsgef", Domain = "erstebank.com", CompanyName ="Erste banka", EndDate = DateTime.Parse("2018-07-06"), MeetingEnded = false },
+                new Meeting{Name = "OTP alumni", Link="https://localhost:44315/Identity/Account/Register/fhbrg", Domain = "otp.com", CompanyName ="OTP banka", EndDate = DateTime.Parse("2018-08-25"), MeetingEnded = false }
             };
             foreach(Meeting m in meetings)
             {
