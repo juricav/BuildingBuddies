@@ -1,4 +1,73 @@
-﻿<!DOCTYPE html>
+﻿<html>
+	<head>
+		<title>Prologue by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="~/html5up/css/main.css" />
+	</head>
+    <body class="is-preload">
+
+        <!-- Header -->
+        <div id="header">
+
+            <div class="top">
+
+                <!-- Logo -->
+                <div id="logo">
+                    <h1 id="title">Building Buddies</h1>
+                    <p>Meet your building buddies</p>
+                </div>
+
+                <!-- Nav -->
+                <nav id="nav">
+                    <ul>
+                        <li><a asp-page="/Index" id="top-link"><span class="icon fa-building">Home</span></a></li>
+                        <li><a asp-area="Identity" asp-page="/Account/Login" id="portfolio-link"><span class="icon fa-sign-in">Sign In</span></a></li>
+                        <li><a asp-area="Identity" asp-page="/Account/Register" id="about-link"><span class="icon fa-plus-circle">Register</span></a></li>
+                        <li><a href="#about" id="about-link"><span class="icon fa-sign-out">Sign Out</span></a></li>
+                        <li><a asp-area="Identity" asp-page="/Account/Manage/Index" id="about-link"><span class="icon fa-user">Profile</span></a></li>
+                        <li><a asp-page="/signalr" id="abodut-link"><span class="icon fa-comments-o">Chat</span></a></li>
+                        <li><a asp-page="/Meetings/Index" id="about-link"><span class="icon fa-users">Meetings</span></a></li>
+                        <li><a asp-page="/Departments/Index" id="contact-link"><span class="icon fa-sitemap">Departments</span></a></li>
+                    </ul>
+                </nav>
+
+            </div>
+
+        </div>
+
+        <!-- Main -->
+        <div id="main">
+
+            @RenderBody()
+
+        </div>
+
+        <!-- Footer -->
+        <div id="footer">
+
+            <!-- Copyright -->
+            <ul class="copyright">
+                <li>&copy; Untitled. All rights reserved.</li>
+                <li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+            </ul>
+
+        </div>
+        @RenderSection("Scripts", required: false)
+        <!-- Scripts -->
+        <script src="~/html5up/js/jquery.min.js"></script>
+        <script src="~/html5up/js/jquery.scrolly.min.js"></script>
+        <script src="~/html5up/js/jquery.scrollex.min.js"></script>
+        <script src="~/html5up/js/browser.min.js"></script>
+        <script src="~/html5up/js/breakpoints.min.js"></script>
+        <script src="~/html5up/js/util.js"></script>
+        <script src="~/html5up/js/main.js"></script>
+
+    </body>
+</html>
+
+
+@*<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
@@ -16,7 +85,7 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
-<body>
+<body >
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -94,4 +163,4 @@
 
     @RenderSection("Scripts", required: false)
 </body>
-</html>
+</html>*@
