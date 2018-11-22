@@ -15,10 +15,7 @@
 
         var liElement = document.createElement('li');
         liElement.setAttribute('class', 'message ' + direction + ' appeared');
-
-        var divAvatar = document.createElement('div');
-        divAvatar.setAttribute('class', 'avatar');
-
+        
         var divTextWrapper = document.createElement('div');
         divTextWrapper.setAttribute('class', 'text_wrapper');
 
@@ -27,7 +24,6 @@
         divText.innerHTML = encodedMsg;
 
         divTextWrapper.appendChild(divText);
-        liElement.appendChild(divAvatar);
         liElement.appendChild(divTextWrapper);
 
         document.getElementById('discussion').appendChild(liElement);
@@ -63,10 +59,7 @@
 
             var liElement = document.createElement('li');
             liElement.setAttribute('class', 'message ' + message.direction + ' appeared');
-
-            var divAvatar = document.createElement('div');
-            divAvatar.setAttribute('class', 'avatar');
-
+            
             var divTextWrapper = document.createElement('div');
             divTextWrapper.setAttribute('class', 'text_wrapper');
 
@@ -75,7 +68,6 @@
             divText.innerHTML = message.message;
 
             divTextWrapper.appendChild(divText);
-            liElement.appendChild(divAvatar);
             liElement.appendChild(divTextWrapper);
 
             document.getElementById('discussion').appendChild(liElement);

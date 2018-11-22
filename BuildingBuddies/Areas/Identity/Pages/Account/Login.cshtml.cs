@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace BuildingBuddies.Areas.Identity.Pages.Account
-{
+{    
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
@@ -50,7 +50,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
-
+        
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))

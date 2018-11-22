@@ -40,7 +40,12 @@ namespace BuildingBuddies
                             .RequireAuthenticatedUser()
                             .Build();
                 config.Filters.Add(new AuthorizeFilter(policy));
-            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            }).SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .AddRazorPagesOptions(options =>
+            {
+                options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "register/{meetingLink?}")
+                .AddAreaPageRoute("Identity", "/Account/Manage/Index", "profile");
+            });
 
             services.AddDbContext<BuildingBuddiesContext>(options =>
                     options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));
@@ -49,6 +54,8 @@ namespace BuildingBuddies
             {
                 o.EnableDetailedErrors = true;
             });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

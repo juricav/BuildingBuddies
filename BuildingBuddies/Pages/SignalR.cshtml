@@ -1,27 +1,21 @@
 ﻿@page
 
-<section id="contact" class="five">
+<section id="contact" class="three">
     <script src="~/lib/signalr/signalr.js"></script>
     <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/js/signalR.js"></script>
     <link rel="stylesheet" type="text/css" href="~/css/chat.css">
 
-    <script src="~/js/signalR.js"></script>
+    <header>
+        <h2>Chat</h2>
+    </header>
 
-    <div class="chat_window">
-        <div class="top_menu">
-            <div class="buttons">
-            </div>
-            <div class="title">Chat</div>
-        </div>
-        <ul id="discussion" class="messages"></ul>
-        <div class="bottom_wrapper clearfix">
-            <div class="message_input_wrapper">
-                <input type="text" class="message_input" id="message" placeholder="Type your message here..." />
-            </div>
-            <div id="sendmessage" class="send_message">
-                <div class="icon"></div>
-                <div class="text">Send</div>
-            </div>
-        </div>
+    <ul id="discussion" class="messages"></ul>
+
+    <div class="message_input_wrapper">
+        <input type="text" class="message_input" id="message" placeholder="..." />
+        <div id="sendmessage" class="send_message text">Send</div>
     </div>
+
+
 </section>
