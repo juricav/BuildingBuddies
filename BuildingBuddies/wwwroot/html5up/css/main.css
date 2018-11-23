@@ -80,7 +80,7 @@ mark {
 
 input::-moz-focus-inner {
     border: 0;
-    padding: 0;
+    padding: 0;    
 }
 
 input, select, textarea {
@@ -119,6 +119,10 @@ body {
         -ms-transition: none !important;
         transition: none !important;
     }
+
+.btn-margin {
+    margin-top: 1%;
+}
 
 input, textarea, select {
     font-family: 'Source Sans Pro', sans-serif;
