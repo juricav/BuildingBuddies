@@ -1,4 +1,5 @@
-﻿using BuildingBuddies.Models;
+﻿using BuildingBuddies.Helpers;
+using BuildingBuddies.Models;
 using Hangfire;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -34,7 +35,7 @@ namespace BuildingBuddies
             });
 
             services.AddHangfire(_ => _.UseSqlServerStorage(Configuration.GetConnectionString("BuildingBuddiesContext")));
-
+            
             services.AddMvc(config => {
                 var policy = new AuthorizationPolicyBuilder()
                             .RequireAuthenticatedUser()
@@ -54,8 +55,6 @@ namespace BuildingBuddies
             {
                 o.EnableDetailedErrors = true;
             });
-
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,4 +1,11 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(document).ready(function () {
+    var pastElement = $(".active");
+    pastElement.removeClass("active");
 
-// Write your JavaScript code.
+    var path = window.location.pathname;
+    if (path == "/") path = "/Index";
+
+    var clrPath = path.substr(1, path.length);
+    var activeElem = $('a[href=' + clrPath + ']');
+    activeElem.addClass("active");
+});

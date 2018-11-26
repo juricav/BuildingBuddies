@@ -6,7 +6,7 @@ namespace BuildingBuddies.Pages
     {
         public void OnGet()
         {
-
-        }
+            
+        }        
     }
 }
