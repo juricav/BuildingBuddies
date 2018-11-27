@@ -4,9 +4,20 @@
     ViewData["Title"] = "Confirm email";
 }
 
-<h2>@ViewData["Title"]</h2>
-<div>
-    <p>
-        Thank you for confirming your email.
-    </p>
-</div>
+<section id="top" class="one dark cover">
+    <div class="container">
+
+        <header>
+            <h2 class="alt">
+                Thank you for confirming your email.
+            </h2>
+            <p>
+                You can sign in now.
+            </p>
+        </header>
+    </div>
+</section>
+
+<script>
+    history.pushState(null, null, '/');    
+</script>

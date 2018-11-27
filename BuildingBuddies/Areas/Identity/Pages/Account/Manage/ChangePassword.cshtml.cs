@@ -56,6 +56,22 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
+            if (user != null)
+            {
+                var MeetingOrganizer = user.MeetingOrganizer;
+
+                ViewData.Add("MeetingOrganizer", MeetingOrganizer);
+
+                var connected = false;
+
+                if (user.AgreedMeetingID != null)
+                {
+                    connected = true;
+                }
+
+                ViewData.Add("Connected", connected);
+            }
+
             var hasPassword = await _userManager.HasPasswordAsync(user);
             if (!hasPassword)
             {
@@ -76,6 +92,22 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account.Manage
             if (user == null)
             {
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+            
+            if (user != null)
+            {
+                var MeetingOrganizer = user.MeetingOrganizer;
+
+                ViewData.Add("MeetingOrganizer", MeetingOrganizer);
+
+                var connected = false;
+
+                if (user.AgreedMeetingID != null)
+                {
+                    connected = true;
+                }
+
+                ViewData.Add("Connected", connected);
             }
 
             var changePasswordResult = await _userManager.ChangePasswordAsync(user, Input.OldPassword, Input.NewPassword);

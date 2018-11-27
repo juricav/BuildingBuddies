@@ -45,7 +45,8 @@ namespace BuildingBuddies
             .AddRazorPagesOptions(options =>
             {
                 options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "register/{meetingLink?}")
-                .AddAreaPageRoute("Identity", "/Account/Manage/Index", "profile");
+                //.AddAreaPageRoute("Identity", "/Account/Manage/Index", "profile");
+                .AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "profile");
             });
 
             services.AddDbContext<BuildingBuddiesContext>(options =>

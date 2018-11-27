@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -122,6 +123,8 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
 
             if (meetingLink == null)
             {
+                ViewData.Add("meetingRegistration", true);
+
                 if (ModelState.IsValid)
                 {
                     var user = new User { UserName = LinkGenerator.GenerateRandomString(10), Email = Input.Email, MeetingOrganizer = true };
@@ -133,17 +136,12 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
                         SendConfirmationEmail(user);
                         return LocalRedirect(returnUrl);
                     }
-
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
                 }
-
                 return Page();
             }
             else
             {
+                ViewData.Add("meetingRegistration", false);
                 // traži se postoji li sastanak na tom linku
                 Meeting SourceMeeting = await _context.Meeting.Where(m => m.Link.Contains(meetingLink)).FirstOrDefaultAsync();
 
@@ -177,6 +175,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
 
                 // If we got this far, something failed, redisplay form
                 PopulateDepartmentsDropDownList(_context, meetingLink);
+                
                 return Page();
             }
         }

@@ -74,18 +74,26 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
 
             var user = await _context.User.Where(u => u.NormalizedEmail == Input.Email.ToUpper()).FirstOrDefaultAsync();
 
-            if(user?.MeetingOrganizer == true)
+            var MeetingOrganizer = false;
+            var connected = false;
+            
+            if (user?.MeetingOrganizer == true)
             {
-                returnUrl += "Meetings";
+                returnUrl += "profile";
+                MeetingOrganizer = true;
             }
             else if (user?.AgreedMeetingID != null)
             {
                 returnUrl += "signalr";
+                connected = true;
             }
             else
             {
                 returnUrl += "Countdown";
             }
+
+            ViewData.Add("MeetingOrganizer", MeetingOrganizer);
+            ViewData.Add("Connected", connected);
 
             if (ModelState.IsValid && user != null)
             {                

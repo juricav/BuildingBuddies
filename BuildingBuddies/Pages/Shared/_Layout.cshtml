@@ -55,14 +55,14 @@
                             }
                         }
 
-                        if ((bool)ViewData["Connected"] != true)
+                        if ((bool)ViewData["Connected"] != true && (bool)@ViewData["MeetingOrganizer"] != true)
                         {
                             <li><a href="login" id="portfolio-link"><span class="icon fa-sign-in">Sign In</span></a></li>
                             <li><a href="register" id="about-link"><span class="icon fa-plus-circle">Register</span></a></li>
                         }
                         else
                         {
-                            <li><a href="profile" id="about-link"><span class="icon fa-user">Profile</span></a></li>
+                            <li><a href="profile" id="about-link"><span class="icon fa-user">Change your password</span></a></li>
                             <li><a href="logout" id="about-link"><span class="icon fa-sign-out">Sign Out</span></a></li>
                         }
                     }
