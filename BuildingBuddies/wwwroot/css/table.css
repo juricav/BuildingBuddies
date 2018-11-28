@@ -1,0 +1,58 @@
+﻿table.custom {
+    border: 1px solid #ccc;
+    border-collapse: collapse;
+    padding: 0;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    table.custom tr {
+        border: 1px solid #ddd;
+        padding: 5px;
+    }
+
+    table.custom th, table.custom td {
+        padding: 10px;
+        text-align: center;
+    }
+
+    table.custom th {
+        font-size: 14px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+@media screen and (max-width: 600px) {
+    table.custom {
+        border: 0;
+    }
+
+        table.custom thead {
+            display: none;
+        }
+
+        table.custom tr {
+            border-bottom: 2px solid #ddd;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        table.custom td {
+            border-bottom: 1px dotted #ccc;
+            display: block;
+            font-size: 13px;
+            text-align: right;
+        }
+
+            table.custom td:last-child {
+                border-bottom: 0;
+            }
+
+            table.custom td:before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+}

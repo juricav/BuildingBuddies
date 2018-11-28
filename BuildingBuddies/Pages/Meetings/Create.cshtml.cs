@@ -22,6 +22,8 @@ namespace BuildingBuddies.Pages.Meetings
 
         public IActionResult OnGet()
         {
+            SetMenuItems();
+
             return Page();
         }
 
@@ -30,6 +32,8 @@ namespace BuildingBuddies.Pages.Meetings
 
         public async Task<IActionResult> OnPostAsync()
         {
+            SetMenuItems();
+
             if (Meeting.EndDate < DateTime.Now.Date)
             {
                 ModelState.AddModelError("Wrong End date", "End date cannot be set in the past.");
@@ -55,10 +59,31 @@ namespace BuildingBuddies.Pages.Meetings
                 _context.Meeting.Add(Meeting);
                 await _context.SaveChangesAsync();
 
-                return RedirectToPage("./Details", new { id = Meeting.MeetingID });
+                return RedirectToPage("./Index");
             }
 
             return Page();
+        }
+
+        public void SetMenuItems()
+        {
+            var UserName = _iHttpContext.HttpContext.User.Identity.Name;
+
+            if (UserName != null)
+            {
+                var LoggedUser = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).FirstOrDefault();
+                var MeetingOrganizer = LoggedUser.MeetingOrganizer;
+
+                var connected = false;
+
+                if (LoggedUser.AgreedMeetingID != null)
+                {
+                    connected = true;
+                }
+
+                ViewData.Add("Connected", connected);
+                ViewData.Add("MeetingOrganizer", MeetingOrganizer);
+            }
         }
     }
 }

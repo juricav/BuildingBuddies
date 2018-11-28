@@ -1,7 +1,8 @@
 ﻿using BuildingBuddies.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BuildingBuddies.Pages.Meetings
@@ -9,10 +10,12 @@ namespace BuildingBuddies.Pages.Meetings
     public class DeleteModel : PageModel
     {
         private readonly BuildingBuddiesContext _context;
+        private readonly IHttpContextAccessor _iHttpContext;
 
-        public DeleteModel(BuildingBuddiesContext context)
+        public DeleteModel(BuildingBuddiesContext context, IHttpContextAccessor iHttpContext)
         {
             _context = context;
+            _iHttpContext = iHttpContext;
         }
 
         [BindProperty]
@@ -20,22 +23,8 @@ namespace BuildingBuddies.Pages.Meetings
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            SetMenuItems();
 
-            Meeting = await _context.Meeting.FirstOrDefaultAsync(m => m.MeetingID == id);
-
-            if (Meeting == null)
-            {
-                return NotFound();
-            }
-            return Page();
-        }
-
-        public async Task<IActionResult> OnPostAsync(int? id)
-        {
             if (id == null)
             {
                 return NotFound();
@@ -48,8 +37,33 @@ namespace BuildingBuddies.Pages.Meetings
                 _context.Meeting.Remove(Meeting);
                 await _context.SaveChangesAsync();
             }
+            else
+            {
+                return NotFound();
+            }
 
             return RedirectToPage("./Index");
+        }
+
+        public void SetMenuItems()
+        {
+            var UserName = _iHttpContext.HttpContext.User.Identity.Name;
+
+            if (UserName != null)
+            {
+                var LoggedUser = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).FirstOrDefault();
+                var MeetingOrganizer = LoggedUser.MeetingOrganizer;
+
+                var connected = false;
+
+                if (LoggedUser.AgreedMeetingID != null)
+                {
+                    connected = true;
+                }
+
+                ViewData.Add("Connected", connected);
+                ViewData.Add("MeetingOrganizer", MeetingOrganizer);
+            }
         }
     }
 }

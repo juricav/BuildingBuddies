@@ -23,6 +23,8 @@ namespace BuildingBuddies.Pages.Departments
 
         public async Task OnGetAsync()
         {
+            SetMenuItems();
+
             var UserName = _iHttpContext.HttpContext.User.Identity.Name;
 
             if (UserName != null)
@@ -38,6 +40,27 @@ namespace BuildingBuddies.Pages.Departments
             }
 
 
+        }
+
+        public void SetMenuItems()
+        {
+            var UserName = _iHttpContext.HttpContext.User.Identity.Name;
+
+            if (UserName != null)
+            {
+                var LoggedUser = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).FirstOrDefault();
+                var MeetingOrganizer = LoggedUser.MeetingOrganizer;
+
+                var connected = false;
+
+                if (LoggedUser.AgreedMeetingID != null)
+                {
+                    connected = true;
+                }
+
+                ViewData.Add("Connected", connected);
+                ViewData.Add("MeetingOrganizer", MeetingOrganizer);
+            }
         }
     }
 }

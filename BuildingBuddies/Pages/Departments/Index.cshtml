@@ -7,18 +7,19 @@
 
 <section id="contact" class="two">
     <p>
-        <a asp-page="Create">Create New</a>
+        <a asp-page="Create">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        </a>
     </p>
-    <table class="table">
+
+    <link rel="stylesheet" type="text/css" href="~/css/table.css">
+
+    <table class="custom">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Department[0].Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Department[0].Meeting.Name)
-                </th>
-                <th></th>
+                <th>Department</th>
+                <th>Meeting</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -32,9 +33,7 @@
                         @Html.DisplayFor(modelItem => item.Meeting.Name)
                     </td>
                     <td>
-                        <a asp-page="./Edit" asp-route-id="@item.DepartmentID">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.DepartmentID">Details</a> |
-                        <a asp-page="./Delete" asp-route-id="@item.DepartmentID">Delete</a>
+                        <a asp-page="./Delete" asp-route-id="@item.MeetingID"><i class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
                 </tr>
             }

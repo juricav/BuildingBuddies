@@ -46,7 +46,9 @@ namespace BuildingBuddies
             {
                 options.Conventions.AddAreaPageRoute("Identity", "/Account/Register", "register/{meetingLink?}")
                 //.AddAreaPageRoute("Identity", "/Account/Manage/Index", "profile");
-                .AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "profile");
+                .AddAreaPageRoute("Identity", "/Account/Manage/ChangePassword", "profile")
+                .AddAreaPageRoute("Meetings", "/Index", "meetings")
+                .AddAreaPageRoute("Departments", "/Index", "departments");
             });
 
             services.AddDbContext<BuildingBuddiesContext>(options =>

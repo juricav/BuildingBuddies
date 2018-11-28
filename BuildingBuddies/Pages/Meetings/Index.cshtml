@@ -1,4 +1,5 @@
-﻿@page "meetings"
+﻿@page
+
 @model BuildingBuddies.Pages.Meetings.IndexModel
 
 @{
@@ -7,107 +8,22 @@
 
 <section id="contact" class="two">
     <p>
-        <a asp-page="Create">Create New</a>
+        <a asp-page="Create">
+            <i class="fa fa-plus-circle" aria-hidden="true"></i>
+        </a>
     </p>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="~/css/table.css">
 
-    @*<link rel="stylesheet" type="text/css" href="~/lib/bootstrap/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="~/lib/grid/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="~/lib/grid/animate.css">
-        <link rel="stylesheet" type="text/css" href="~/lib/grid/select2.min.css">
-        <link rel="stylesheet" type="text/css" href="~/lib/grid/perfect-scrollbar.css">
-        <link rel="stylesheet" type="text/css" href="~/lib/grid/util.css">
-        <link rel="stylesheet" type="text/css" href="~/lib/grid/main.css">
-
-        <div class="limiter">
-            <div class="container-table100">
-                <div class="wrap-table100">
-                    <div class="table">
-
-                        <div class="row header">
-                            <div class="cell">
-                                @Html.DisplayNameFor(model => model.Meeting[0].Name)
-                            </div>
-                            <div class="cell">
-                                @Html.DisplayNameFor(model => model.Meeting[0].Link)
-                            </div>
-                            <div class="cell">
-                                @Html.DisplayNameFor(model => model.Meeting[0].Domain)
-                            </div>
-                            <div class="cell">
-                                @Html.DisplayNameFor(model => model.Meeting[0].CompanyName)
-                            </div>
-                            <div class="cell">
-                                @Html.DisplayNameFor(model => model.Meeting[0].EndDate)
-                            </div>
-                            <div class="cell">
-                            </div>
-                            <div class="cell">
-                            </div>
-                            <div class="cell">
-                            </div>
-                        </div>
-
-                        @foreach (var item in Model.Meeting)
-                        {
-                        <div class="row">
-                            <div class="cell" data-title="Full Name">
-                                @Html.DisplayFor(modelItem => item.Name)
-                            </div>
-                            <div class="cell" data-title="Age">
-                                @Html.DisplayFor(modelItem => item.Link)
-                            </div>
-                            <div class="cell" data-title="Job Title">
-                                @Html.DisplayFor(modelItem => item.Domain)
-                            </div>
-                            <div class="cell" data-title="Location">
-                                @Html.DisplayFor(modelItem => item.CompanyName)
-                            </div>
-                            <div class="cell" data-title="Location">
-                                @Html.DisplayFor(modelItem => item.EndDate)
-                            </div>
-                            <div class="cell" data-title="Location">
-                                <a asp-page="./Edit" asp-route-id="@item.MeetingID">Edit</a>
-                            </div>
-                            <div class="cell" data-title="Location">
-                                <a asp-page="./Details" asp-route-id="@item.MeetingID">Details</a>
-                            </div>
-                            <div class="cell" data-title="Location">
-                                <a asp-page="./Delete" asp-route-id="@item.MeetingID">Delete</a>
-                            </div>
-                        </div>
-                        }
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <script src="~/lib/jquery/dist/jquery.min.js"></script>
-        <script src="~/lib/grid/popper.js"></script>
-        <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
-        <script src="~/lib/grid/select2.min.js"></script>
-        <script src="~/lib/grid/main.js"></script>*@
-
-    <table class="table">
+    <table class="custom">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Meeting[0].Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Meeting[0].Link)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Meeting[0].Domain)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Meeting[0].CompanyName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Meeting[0].EndDate)
-                </th>
-                <th></th>
+                <th>Meeting</th>
+                <th>Link</th>
+                <th>Domain</th>
+                <th>Company</th>
+                <th>End of registrations</th>
+                <th>Delete</th>
             </tr>
         </thead>
         <tbody>
@@ -130,9 +46,7 @@
                         @Html.DisplayFor(modelItem => item.EndDate)
                     </td>
                     <td>
-                        <a asp-page="./Edit" asp-route-id="@item.MeetingID">Edit</a> |
-                        <a asp-page="./Details" asp-route-id="@item.MeetingID">Details</a> |
-                        <a asp-page="./Delete" asp-route-id="@item.MeetingID">Delete</a>
+                        <a asp-page="./Delete" asp-route-id="@item.MeetingID"><i class="fa fa-trash" aria-hidden="true"></i></a>
                     </td>
                 </tr>
             }

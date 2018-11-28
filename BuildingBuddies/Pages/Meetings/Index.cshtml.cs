@@ -24,17 +24,28 @@ namespace BuildingBuddies.Pages.Meetings
         public async Task OnGetAsync()
         {
             var UserName = _iHttpContext.HttpContext.User.Identity.Name;
-
+            
             if (UserName != null)
             {
                 var LoggedUser = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).FirstOrDefault();
                 var MeetingOrganizer = LoggedUser.MeetingOrganizer;
+                
+                var connected = false;
+
+                if (LoggedUser.AgreedMeetingID != null)
+                {
+                    connected = true;
+                }
+
+                ViewData.Add("Connected", connected);
 
                 if (MeetingOrganizer == true)
                 {
                     // vraćamo samo Meetinge tog korisnika
                     Meeting = await _context.Meeting.Where(m => m.CreatorID == LoggedUser.Id).ToListAsync();
                 }
+
+                ViewData.Add("MeetingOrganizer", MeetingOrganizer);
             }
         }
     }

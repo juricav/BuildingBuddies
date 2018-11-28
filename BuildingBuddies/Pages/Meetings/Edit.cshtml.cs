@@ -1,4 +1,5 @@
 ﻿using BuildingBuddies.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +10,13 @@ namespace BuildingBuddies.Pages.Meetings
 {
     public class EditModel : PageModel
     {
-        private readonly BuildingBuddies.Models.BuildingBuddiesContext _context;
+        private readonly BuildingBuddiesContext _context;
+        private readonly IHttpContextAccessor _iHttpContext;
 
-        public EditModel(BuildingBuddies.Models.BuildingBuddiesContext context)
+        public EditModel(BuildingBuddiesContext context, IHttpContextAccessor iHttpContext)
         {
             _context = context;
+            _iHttpContext = iHttpContext;
         }
 
         [BindProperty]
@@ -21,6 +24,25 @@ namespace BuildingBuddies.Pages.Meetings
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
+            var UserName = _iHttpContext.HttpContext.User.Identity.Name;
+
+            if (UserName != null)
+            {
+                var LoggedUser = _context.User.Where(u => u.NormalizedUserName == UserName.ToUpper()).FirstOrDefault();
+                var MeetingOrganizer = LoggedUser.MeetingOrganizer;
+
+                ViewData.Add("MeetingOrganizer", MeetingOrganizer);
+
+                var connected = false;
+
+                if (LoggedUser.AgreedMeetingID != null)
+                {
+                    connected = true;
+                }
+
+                ViewData.Add("Connected", connected);
+            }
+
             if (id == null)
             {
                 return NotFound();

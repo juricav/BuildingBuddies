@@ -86,6 +86,28 @@ namespace BuildingBuddies.Helpers
                 }
                 _context.SaveChanges();
             }
+
+            // dohvaća sastanke koji su istekli prije 2 tjedna i briše korisnike
+            List<Meeting> ExpiredMeetings = await _context.Meeting.Where(m => m.EndDate >= m.EndDate.AddDays(14) && m.MeetingEnded == true)
+                                                            .ToListAsync();
+
+            if (ExpiredMeetings.Count() > 0)
+            {
+                foreach (var m in ExpiredMeetings)
+                {
+                    await DeleteUsers(m.MeetingID);
+                }
+                _context.SaveChanges();
+            }
+        }
+
+        public async Task DeleteUsers(int meetingID)
+        {
+            List<User> UsersToDelete = await _context.User.Where(u => u.MeetingID == meetingID && u.MeetingOrganizer == false)
+                                                        .OrderBy(u => rng.Next())
+                                                        .ToListAsync();
+
+            _context.User.RemoveRange(UsersToDelete);
         }
     }
 }
