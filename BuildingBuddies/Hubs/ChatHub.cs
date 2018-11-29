@@ -29,30 +29,33 @@ namespace SignalRChat.Hubs
                 
         public void SendMessage(string messageText)
         {
-            User User = GetCurrentUser();
-
-            User Reciever = _context.User.Where(r => r.AgreedMeetingID == User.AgreedMeetingID && r.Id != User.Id).FirstOrDefault();
-            var RecieverId = Reciever.ConnectionID;
-
-            // šalje se poruka pošiljatelju da ima svoju kopiju
-            Clients.Client(User.ConnectionID).SendAsync("BroadcastMessage", User.UserName, messageText, "right");
-            // šaljemo drugom članu, ako ima connectionId
-            if(RecieverId != null)
+            if(!string.IsNullOrEmpty(messageText))
             {
-                Clients.Client(RecieverId).SendAsync("BroadcastMessage", User.UserName, messageText, "left");
+                User User = GetCurrentUser();
+
+                User Reciever = _context.User.Where(r => r.AgreedMeetingID == User.AgreedMeetingID && r.Id != User.Id).FirstOrDefault();
+                var RecieverId = Reciever.ConnectionID;
+
+                // šalje se poruka pošiljatelju da ima svoju kopiju
+                Clients.Client(User.ConnectionID).SendAsync("BroadcastMessage", User.UserName, messageText, "right");
+                // šaljemo drugom članu, ako ima connectionId
+                if (RecieverId != null)
+                {
+                    Clients.Client(RecieverId).SendAsync("BroadcastMessage", User.UserName, messageText, "left");
+                }
+
+                // poruka se sprema u bazu
+                var DbMessage = new ChatMessage
+                {
+                    Message = messageText,
+                    Name = User.NormalizedUserName,
+                    Time = DateTime.Now,
+                    AgreedMeetingID = User.AgreedMeetingID
+                };
+
+                _context.ChatMessage.Add(DbMessage);
+                _context.SaveChanges();
             }
-            
-            // poruka se sprema u bazu
-            var DbMessage = new ChatMessage
-            {
-                Message = messageText,
-                Name = User.NormalizedUserName,
-                Time = DateTime.Now,
-                AgreedMeetingID = User.AgreedMeetingID
-            };
-            
-            _context.ChatMessage.Add(DbMessage);
-            _context.SaveChanges();
         }
         
         public override Task OnConnectedAsync()

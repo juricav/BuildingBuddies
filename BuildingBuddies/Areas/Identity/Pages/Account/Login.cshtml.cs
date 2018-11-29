@@ -12,7 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace BuildingBuddies.Areas.Identity.Pages.Account
-{    
+{
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
@@ -50,7 +50,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
-        
+
         public async Task OnGetAsync(string returnUrl = null)
         {
             if (!string.IsNullOrEmpty(ErrorMessage))
@@ -76,10 +76,10 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
 
             var MeetingOrganizer = false;
             var connected = false;
-            
+
             if (user?.MeetingOrganizer == true)
             {
-                returnUrl += "profile";
+                returnUrl += "meetings";
                 MeetingOrganizer = true;
             }
             else if (user?.AgreedMeetingID != null)
@@ -96,29 +96,20 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
             ViewData.Add("Connected", connected);
 
             if (ModelState.IsValid && user != null)
-            {                
+            {
                 var result = await _signInManager.PasswordSignInAsync(user.NormalizedUserName, Input.Password, Input.RememberMe, lockoutOnFailure: true);
 
                 var confirmedEmail = user.EmailConfirmed;
 
                 if (result.Succeeded)
                 {
-                    if(!confirmedEmail)
+                    if (!confirmedEmail)
                     {
                         ModelState.AddModelError(string.Empty, "You have to confirm your email to log in.");
                         return Page();
                     }
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
-                }
-                if (result.RequiresTwoFactor)
-                {
-                    return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-                }
-                if (result.IsLockedOut)
-                {
-                    _logger.LogWarning("User account locked out.");
-                    return RedirectToPage("./Lockout");
                 }
                 else
                 {

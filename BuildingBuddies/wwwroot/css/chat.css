@@ -15,45 +15,35 @@
         opacity: 0;
     }
 
-        .messages .message.left .avatar {
-            background-color: #f5886e;
-            float: left;
-        }
-
         .messages .message.left .text_wrapper {
-            background-color: #ffe6cb;
+            background-color: #c7eafc;
             margin-left: 20px;
             float: left;
         }
 
             .messages .message.left .text_wrapper::after, .messages .message.left .text_wrapper::before {
                 right: 100%;
-                border-right-color: #ffe6cb;
+                border-right-color: #c7eafc;
             }
 
         .messages .message.left .text {
-            color: #c48843;
+            color: #45829b;
             text-align: left;
         }
 
-        .messages .message.right .avatar {
-            background-color: #fdbf68;
-            float: right;
-        }
-
         .messages .message.right .text_wrapper {
-            background-color: #c7eafc;
+            background-color: #ffe6cb;
             margin-right: 20px;
             float: right;
         }
 
             .messages .message.right .text_wrapper::after, .messages .message.right .text_wrapper::before {
                 left: 100%;
-                border-left-color: #c7eafc;
+                border-left-color: #ffe6cb;
             }
 
         .messages .message.right .text {
-            color: #45829b;
+            color: #c48843;
             text-align: right;
         }
 
@@ -116,8 +106,8 @@
     width: 10%;
     display: inline-block;
     border-radius: 10px;
-    background-color: #a3d063;
-    color: #fff;
+    background-color: navajowhite;
+    color: #888;
     cursor: pointer;
     transition: all 0.2s linear;
     text-align: center;
