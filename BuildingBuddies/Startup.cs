@@ -52,7 +52,10 @@ namespace BuildingBuddies
             });
 
             services.AddDbContext<BuildingBuddiesContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));
+            options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));
+
+            //services.AddDbContext<BuildingBuddiesContext>(options =>
+            //        options.UseSqlServer(Configuration.GetConnectionString("BuildingBuddiesContext")));
             
             services.AddSignalR(o =>
             {

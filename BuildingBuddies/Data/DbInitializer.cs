@@ -14,7 +14,7 @@ namespace BuildingBuddies.Data
     {
         public static void Initialize(BuildingBuddiesContext context)
         {
-            //context.Database.EnsureCreated();
+            context.Database.EnsureCreated();
 
             // traži sastanke
             if (context.Meeting.Any())

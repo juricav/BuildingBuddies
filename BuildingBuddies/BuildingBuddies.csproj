@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
+    <UserSecretsId>1479ce0d-8970-47b1-9b11-70d22835bb16</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,12 +21,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\Pages\Account\Manage\ManageNavPages.cs" />
     <Compile Remove="Models\Chat.cs" />
     <Compile Remove="Models\Location.cs" />
     <Compile Remove="Models\MessageVM.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
+    <Content Remove="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
     <Content Remove="wwwroot\js\chat.js" />
   </ItemGroup>
 
