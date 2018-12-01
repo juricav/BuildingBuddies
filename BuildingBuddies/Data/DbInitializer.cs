@@ -23,7 +23,7 @@ namespace BuildingBuddies.Data
                     Link= "https://localhost:44315/Identity/Account/Register/fdsgef",
                     Domain= "erstebank.com",
                     CompanyName= "Erste banka",
-                    EndDate= DateTime.Parse("2018-12-06"),
+                    EndDate= DateTime.Parse("2018-11-06"),
                     MeetingEnded= false
                 },
                 new Meeting{Name= "OTP alumni",
