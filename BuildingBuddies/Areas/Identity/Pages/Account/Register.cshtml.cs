@@ -119,7 +119,7 @@ namespace BuildingBuddies.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string meetingLink = null)
         {
-            string returnUrl = Url.Content("~/RegistrationSuccessful");
+            string returnUrl = Url.Content("~/registrationSuccessful");
 
             if (meetingLink == null)
             {

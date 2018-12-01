@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SignalR;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -79,8 +78,6 @@ namespace SignalRChat.Hubs
             }).ToList().OrderBy(cm => cm.Time);
             
             // slanje poruka za ispis povijesti
-            //Clients.All.SendAsync("History", messages);
-
             Clients.Client(ConnectionId).SendAsync("History", messages);
 
             return base.OnConnectedAsync();

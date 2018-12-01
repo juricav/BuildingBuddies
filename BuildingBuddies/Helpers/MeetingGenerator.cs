@@ -65,7 +65,7 @@ namespace BuildingBuddies.Helpers
 
                 await MailSender.Send(u.Email,
                                     $"You have been connected with a buddy",
-                                    $"Dear {u.UserName}, <br/>your buddy is {SecondUsername}! You can log in <a href='https://localhost:44315/signalr'>here</a> to agree on a meeting place and time.");
+                                    $"Dear {u.UserName}, <br/>your buddy is {SecondUsername}! You can log in <a href='https://localhost:44315/login'>here</a> to agree on a meeting place and time.");
             }
         }
 

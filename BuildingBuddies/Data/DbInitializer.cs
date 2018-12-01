@@ -19,8 +19,20 @@ namespace BuildingBuddies.Data
 
             var meetings = new Meeting[]
             {
-                new Meeting{Name= "Erste novi zaposlenici", Link="https://localhost:44315/Identity/Account/Register/fdsgef", Domain = "erstebank.com", CompanyName ="Erste banka", EndDate = DateTime.Parse("2018-07-06"), MeetingEnded = false },
-                new Meeting{Name = "OTP alumni", Link="https://localhost:44315/Identity/Account/Register/fhbrg", Domain = "otp.com", CompanyName ="OTP banka", EndDate = DateTime.Parse("2018-08-25"), MeetingEnded = false }
+                new Meeting{Name= "Erste novi zaposlenici",
+                    Link= "https://localhost:44315/Identity/Account/Register/fdsgef",
+                    Domain= "erstebank.com",
+                    CompanyName= "Erste banka",
+                    EndDate= DateTime.Parse("2018-12-06"),
+                    MeetingEnded= false
+                },
+                new Meeting{Name= "OTP alumni",
+                    Link= "https://localhost:44315/Identity/Account/Register/fhbrg",
+                    Domain= "otp.com",
+                    CompanyName= "OTP banka",
+                    EndDate= DateTime.Parse("2018-12-25"),
+                    MeetingEnded= false
+                }
             };
 
             foreach (Meeting m in meetings)
@@ -32,7 +44,7 @@ namespace BuildingBuddies.Data
             var departments = new Department[]
             {
                 new Department{Name="eSlužba 1", MeetingID=meetings.Single(m => m.Domain == "erstebank.com").MeetingID},
-                new Department{ Name="eSlužba 2", MeetingID=meetings.Single(m => m.Domain == "erstebank.com").MeetingID},
+                new Department{Name="eSlužba 2", MeetingID=meetings.Single(m => m.Domain == "erstebank.com").MeetingID},
                 new Department{Name="eSlužba 3", MeetingID=meetings.Single(m => m.Domain == "erstebank.com").MeetingID},
                 new Department{Name="oSlužba 1", MeetingID=meetings.Single(m => m.Domain == "otp.com").MeetingID},
                 new Department{Name="oSlužba 2", MeetingID=meetings.Single(m => m.Domain == "otp.com").MeetingID},
@@ -57,7 +69,7 @@ namespace BuildingBuddies.Data
                 new User{Email="email1@otp.com", UserName="kifla", DepartmentID=departments.Single(d => d.Name == "oSlužba 1").DepartmentID, MeetingID=departments.Single(d => d.Name == "oSlužba 1").MeetingID},
                 new User{Email="email2@otp.com", UserName="krafna", DepartmentID=departments.Single(d => d.Name == "oSlužba 1").DepartmentID, MeetingID=departments.Single(d => d.Name == "oSlužba 1").MeetingID},
                 new User{Email="email3@otp.com", UserName="piroska", DepartmentID=departments.Single(d => d.Name == "oSlužba 1").DepartmentID, MeetingID=departments.Single(d => d.Name == "oSlužba 1").MeetingID},
-                new User{Email="email4@otp.com", UserName="prstic", DepartmentID=departments.Single(d => d.Name == "oSlužba 1").DepartmentID, MeetingID=departments.Single(d => d.Name == "oSlužba 1").MeetingID},
+                new User{Email="email4@otp.com", UserName="mrav", DepartmentID=departments.Single(d => d.Name == "oSlužba 1").DepartmentID, MeetingID=departments.Single(d => d.Name == "oSlužba 1").MeetingID},
                 new User{Email="email5@otp.com", UserName="prskalica", DepartmentID=departments.Single(d => d.Name == "oSlužba 2").DepartmentID, MeetingID=departments.Single(d => d.Name == "oSlužba 2").MeetingID},
                 new User{Email="email6@otp.com", UserName="kojot", DepartmentID=departments.Single(d => d.Name == "oSlužba 2").DepartmentID, MeetingID=departments.Single(d => d.Name == "oSlužba 2").MeetingID},
                 new User{Email="email7@otp.com", UserName="nosorog", DepartmentID=departments.Single(d => d.Name == "oSlužba 2").DepartmentID, MeetingID=departments.Single(d => d.Name == "oSlužba 2").MeetingID},
