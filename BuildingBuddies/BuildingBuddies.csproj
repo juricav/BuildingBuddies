@@ -6,27 +6,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\Services\**" />
     <Compile Remove="Pages\AgreedMeetings\**" />
     <Compile Remove="Pages\Components\**" />
     <Compile Remove="Pages\MeetingChat\**" />
+    <Content Remove="Areas\Identity\Services\**" />
     <Content Remove="Pages\AgreedMeetings\**" />
     <Content Remove="Pages\Components\**" />
     <Content Remove="Pages\MeetingChat\**" />
+    <EmbeddedResource Remove="Areas\Identity\Services\**" />
     <EmbeddedResource Remove="Pages\AgreedMeetings\**" />
     <EmbeddedResource Remove="Pages\Components\**" />
     <EmbeddedResource Remove="Pages\MeetingChat\**" />
+    <None Remove="Areas\Identity\Services\**" />
     <None Remove="Pages\AgreedMeetings\**" />
     <None Remove="Pages\Components\**" />
     <None Remove="Pages\MeetingChat\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Identity\Pages\Account\Manage\ManageNavPages.cs" />
     <Compile Remove="Models\Chat.cs" />
     <Compile Remove="Models\Location.cs" />
     <Compile Remove="Models\MessageVM.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
+    <Content Remove="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
     <Content Remove="wwwroot\js\chat.js" />
   </ItemGroup>
 
